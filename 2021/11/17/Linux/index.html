@@ -450,21 +450,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-11-27
+                    2021-12-04
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    147
+                    503
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -495,7 +495,7 @@
                 <h1 id="关于Linux的一些记录"><a href="#关于Linux的一些记录" class="headerlink" title="关于Linux的一些记录"></a>关于Linux的一些记录</h1><h2 id="ssh的配置"><a href="#ssh的配置" class="headerlink" title="ssh的配置"></a>ssh的配置</h2><ol>
 <li> 本地客户端生成公钥</li>
 <li> 将公钥传到远端authorized_key</li>
-<li> 本地通过ssh <a href="mailto:&#120;&#120;&#x78;&#x40;&#x78;&#x2e;&#120;&#46;&#120;&#46;&#x78;">&#120;&#120;&#x78;&#x40;&#x78;&#x2e;&#120;&#46;&#120;&#46;&#x78;</a>访问</li>
+<li> 本地通过ssh <a href="mailto:&#x78;&#120;&#120;&#x40;&#x78;&#x2e;&#120;&#46;&#120;&#46;&#x78;">&#x78;&#120;&#120;&#x40;&#x78;&#x2e;&#120;&#46;&#120;&#46;&#x78;</a>访问</li>
 </ol>
 <h2 id="oh-my-zsh的配置"><a href="#oh-my-zsh的配置" class="headerlink" title="oh-my-zsh的配置"></a>oh-my-zsh的配置</h2><h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><ol>
 <li>wget <a target="_blank" rel="noopener" href="https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh">https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh</a></li>
@@ -511,7 +511,62 @@
 <li>git clone <a target="_blank" rel="noopener" href="https://gitee.com/yuhldr/zsh-syntax-highlighting.git">https://gitee.com/yuhldr/zsh-syntax-highlighting.git</a> ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting</li>
 <li>git clone <a target="_blank" rel="noopener" href="https://gitee.com/yuhldr/zsh-autosuggestions.git">https://gitee.com/yuhldr/zsh-autosuggestions.git</a> ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions</li>
 </ol>
-<h2 id="vim的配置"><a href="#vim的配置" class="headerlink" title="vim的配置"></a>vim的配置</h2><h2 id="hexo部署到腾讯云"><a href="#hexo部署到腾讯云" class="headerlink" title="hexo部署到腾讯云"></a>hexo部署到腾讯云</h2>
+<h2 id="CentOS-7配置"><a href="#CentOS-7配置" class="headerlink" title="CentOS 7配置"></a>CentOS 7配置</h2><h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><blockquote>
+<p>sudo vim /etc/yum.repos.d/CentOS-Base.repo </p>
+</blockquote>
+<pre class="line-numbers language-none"><code class="language-none"># CentOS-Base.repo
+#
+# The mirror system uses the connecting IP address of the client and the
+# update status of each mirror to pick mirrors that are updated to and
+# geographically close to the client.  You should use this for CentOS updates
+# unless you are manually picking other mirrors.
+#
+# If the mirrorlist&#x3D; does not work for you, as a fall back you can try the
+# remarked out baseurl&#x3D; line instead.
+#
+#
+
+
+[base]
+name&#x3D;CentOS-$releasever - Base
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;os&#x2F;$basearch&#x2F;
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;os
+enabled&#x3D;1
+gpgcheck&#x3D;1
+gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7
+
+#released updates
+[updates]
+name&#x3D;CentOS-$releasever - Updates
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;updates&#x2F;$basearch&#x2F;
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;updates
+enabled&#x3D;1
+gpgcheck&#x3D;1
+gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7
+
+
+
+#additional packages that may be useful
+[extras]
+name&#x3D;CentOS-$releasever - Extras
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;extras&#x2F;$basearch&#x2F;
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;extras
+enabled&#x3D;1
+gpgcheck&#x3D;1
+gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7
+
+
+
+#additional packages that extend functionality of existing packages
+[centosplus]
+name&#x3D;CentOS-$releasever - Plus
+baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;centosplus&#x2F;$basearch&#x2F;
+#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;centosplus
+gpgcheck&#x3D;1
+enabled&#x3D;0
+gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
                 
             </div>
             <hr/>
@@ -1017,7 +1072,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">5k</span>&nbsp;字
+                class="white-color">5.4k</span>&nbsp;字
             
             
             
