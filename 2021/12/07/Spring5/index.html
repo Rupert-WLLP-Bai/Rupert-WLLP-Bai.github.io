@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Linux, LAOBAI">
+    <meta name="keywords" content="Spring5, LAOBAI">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Linux | LAOBAI</title>
+    <title>Spring5 | LAOBAI</title>
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Linux</h1>
+                    <h1 class="description center-align post-title">Spring5</h1>
                 </div>
             </div>
         </div>
@@ -429,9 +429,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Java-%E6%A1%86%E6%9E%B6/">
+                                <span class="chip bg-color">Java,框架</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -443,28 +447,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-11-17
+                    2021-12-07
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-12-04
+                    2021-12-07
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    503
+                    165
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
 
@@ -492,80 +496,31 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="关于Linux的一些记录"><a href="#关于Linux的一些记录" class="headerlink" title="关于Linux的一些记录"></a>关于Linux的一些记录</h1><h2 id="ssh的配置"><a href="#ssh的配置" class="headerlink" title="ssh的配置"></a>ssh的配置</h2><ol>
-<li> 本地客户端生成公钥</li>
-<li> 将公钥传到远端authorized_key</li>
-<li> 本地通过ssh <a href="mailto:&#x78;&#x78;&#120;&#64;&#120;&#x2e;&#120;&#46;&#120;&#x2e;&#120;">&#x78;&#x78;&#120;&#64;&#120;&#x2e;&#120;&#46;&#120;&#x2e;&#120;</a>访问</li>
+                <h1 id="Spring5"><a href="#Spring5" class="headerlink" title="Spring5"></a>Spring5</h1><h2 id="初始化配置"><a href="#初始化配置" class="headerlink" title="初始化配置"></a>初始化配置</h2><pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>beans</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+
+
+    <span class="token comment">&lt;!--使用Spring来创建对象，在Spring这些都称为Bean
+    类型 变量名 = new 类型();
+    Hello hello = new Hello();
+
+    id = 变量名
+    class = new的对象
+    property 相当于给对象中的属性设置一个值！
+        --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hello<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.laobai.pojo.Hello<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>str<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Spring<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>beans</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h2><ol>
+<li>要实现不同的操作，不用在程序中进行改动，<strong>修改配置文件即可</strong></li>
+<li>一句话概括就是,<em><strong>对象由Spring 创建 管理 装配</strong></em></li>
 </ol>
-<h2 id="oh-my-zsh的配置"><a href="#oh-my-zsh的配置" class="headerlink" title="oh-my-zsh的配置"></a>oh-my-zsh的配置</h2><h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><ol>
-<li>wget <a target="_blank" rel="noopener" href="https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh">https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh</a></li>
-<li>chmod +x install.sh</li>
-<li>vim install.sh</li>
-<li>修改源<blockquote>
-<p>REPO=${REPO:-mirrors/oh-my-zsh}<br>REMOTE=${REMOTE:-<a target="_blank" rel="noopener" href="https://gitee.com/$%7BREPO%7D.git%7D">https://gitee.com/${REPO}.git}</a></p>
-</blockquote>
-</li>
-<li>./install.sh</li>
-</ol>
-<h3 id="配置插件和主题"><a href="#配置插件和主题" class="headerlink" title="配置插件和主题"></a>配置插件和主题</h3><ol>
-<li>git clone <a target="_blank" rel="noopener" href="https://gitee.com/yuhldr/zsh-syntax-highlighting.git">https://gitee.com/yuhldr/zsh-syntax-highlighting.git</a> ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting</li>
-<li>git clone <a target="_blank" rel="noopener" href="https://gitee.com/yuhldr/zsh-autosuggestions.git">https://gitee.com/yuhldr/zsh-autosuggestions.git</a> ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions</li>
-</ol>
-<h2 id="CentOS-7配置"><a href="#CentOS-7配置" class="headerlink" title="CentOS 7配置"></a>CentOS 7配置</h2><h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><blockquote>
-<p>sudo vim /etc/yum.repos.d/CentOS-Base.repo </p>
-</blockquote>
-<pre class="line-numbers language-none"><code class="language-none"># CentOS-Base.repo
-#
-# The mirror system uses the connecting IP address of the client and the
-# update status of each mirror to pick mirrors that are updated to and
-# geographically close to the client.  You should use this for CentOS updates
-# unless you are manually picking other mirrors.
-#
-# If the mirrorlist&#x3D; does not work for you, as a fall back you can try the
-# remarked out baseurl&#x3D; line instead.
-#
-#
-
-
-[base]
-name&#x3D;CentOS-$releasever - Base
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;os&#x2F;$basearch&#x2F;
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;os
-enabled&#x3D;1
-gpgcheck&#x3D;1
-gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7
-
-#released updates
-[updates]
-name&#x3D;CentOS-$releasever - Updates
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;updates&#x2F;$basearch&#x2F;
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;updates
-enabled&#x3D;1
-gpgcheck&#x3D;1
-gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7
-
-
-
-#additional packages that may be useful
-[extras]
-name&#x3D;CentOS-$releasever - Extras
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;extras&#x2F;$basearch&#x2F;
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;extras
-enabled&#x3D;1
-gpgcheck&#x3D;1
-gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7
-
-
-
-#additional packages that extend functionality of existing packages
-[centosplus]
-name&#x3D;CentOS-$releasever - Plus
-baseurl&#x3D;https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;centos&#x2F;$releasever&#x2F;centosplus&#x2F;$basearch&#x2F;
-#mirrorlist&#x3D;http:&#x2F;&#x2F;mirrorlist.centos.org&#x2F;?release&#x3D;$releasever&amp;arch&#x3D;$basearch&amp;repo&#x3D;centosplus
-gpgcheck&#x3D;1
-enabled&#x3D;0
-gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 
                 
             </div>
@@ -592,7 +547,7 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://www.laobai1230.top/2021/11/17/Linux/">http://www.laobai1230.top/2021/11/17/Linux/</a>
+                    <a href="http://www.laobai1230.top/2021/12/07/Spring5/">http://www.laobai1230.top/2021/12/07/Spring5/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -629,7 +584,11 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/Java-%E6%A1%86%E6%9E%B6/">
+                                    <span class="chip bg-color">Java,框架</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -797,17 +756,18 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/11/28/Hexo/">
+                <a href="/2021/12/07/Spring5/">
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/20.jpg" class="responsive-img" alt="Hexo">
+                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="Spring5">
                         
-                        <span class="card-title">Hexo</span>
+                        <span class="card-title">Spring5</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -817,9 +777,9 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-07
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -828,11 +788,12 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%9A%E5%AE%A2/">
-                        <span class="chip bg-color">博客</span>
+                    <a href="/tags/Java-%E6%A1%86%E6%9E%B6/">
+                        <span class="chip bg-color">Java,框架</span>
                     </a>
                     
                 </div>
@@ -846,13 +807,13 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/11/17/Netty/">
+                <a href="/2021/12/05/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/10.jpg" class="responsive-img" alt="Netty">
+                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/3.jpg" class="responsive-img" alt="正则表达式">
                         
-                        <span class="card-title">Netty</span>
+                        <span class="card-title">正则表达式</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -863,7 +824,7 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-17
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-05
                             </span>
                         <span class="publish-author">
                             
@@ -1072,7 +1033,7 @@ gpgkey&#x3D;file:&#x2F;etc&#x2F;pki&#x2F;rpm-gpg&#x2F;RPM-GPG-KEY-7<span aria-hi
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">5.6k</span>&nbsp;字
+                class="white-color">5.3k</span>&nbsp;字
             
             
             
