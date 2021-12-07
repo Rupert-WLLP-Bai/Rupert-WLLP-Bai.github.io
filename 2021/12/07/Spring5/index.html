@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="LaTeX, LAOBAI">
+    <meta name="keywords" content="Spring5, LAOBAI">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>LaTeX | LAOBAI</title>
+    <title>Spring5 | LAOBAI</title>
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">LaTeX</h1>
+                    <h1 class="description center-align post-title">Spring5</h1>
                 </div>
             </div>
         </div>
@@ -431,8 +431,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%86%99%E4%BD%9C/">
-                                <span class="chip bg-color">写作</span>
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%A1%86%E6%9E%B6/">
+                                <span class="chip bg-color">框架</span>
                             </a>
                         
                     </div>
@@ -447,7 +451,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-11-28
+                    2021-12-07
                 </div>
                 
 
@@ -461,14 +465,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    626
+                    343
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    1 分
                 </div>
                 
 
@@ -496,101 +500,56 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="LaTeX基础"><a href="#LaTeX基础" class="headerlink" title="LaTeX基础"></a>LaTeX基础</h1><h2 id="documentclass的设置"><a href="#documentclass的设置" class="headerlink" title="documentclass的设置"></a>documentclass的设置</h2><ol>
-<li><p>documentclass</p>
-<ul>
-<li>IEEEtran</li>
-<li>article</li>
-<li>book</li>
-<li>ctexart</li>
-</ul>
-</li>
-<li><p>设置纸张大小，字体大小，单面或者双面</p>
-<ul>
-<li>a4paper</li>
-<li>10pt,11pt,12pt</li>
-<li>oneside</li>
-</ul>
+                <h1 id="Spring5"><a href="#Spring5" class="headerlink" title="Spring5"></a>Spring5</h1><p>该项目的代码仓库地址: <a target="_blank" rel="noopener" href="https://gitee.com/laobai1230/spring_learning">https://gitee.com/laobai1230/spring_learning</a></p>
+<h2 id="初始化配置"><a href="#初始化配置" class="headerlink" title="初始化配置"></a>初始化配置</h2><pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>beans</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+
+
+    <span class="token comment">&lt;!--使用Spring来创建对象，在Spring这些都称为Bean
+    类型 变量名 = new 类型();
+    Hello hello = new Hello();
+
+    id = 变量名
+    class = new的对象
+    property 相当于给对象中的属性设置一个值！
+        --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hello<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.laobai.pojo.Hello<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>str<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Spring<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>beans</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h2><h3 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h3><ol>
+<li>要实现不同的操作，不用在程序中进行改动，<strong>修改配置文件即可</strong></li>
+<li>一句话概括就是，<em><strong>对象由Spring 创建 管理 装配</strong></em></li>
+</ol>
+<h3 id="构造对象的方法"><a href="#构造对象的方法" class="headerlink" title="构造对象的方法"></a>构造对象的方法</h3><ol>
+<li><p>下标赋值</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token comment">&lt;!-- 第一种方式 下标赋值 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>user1<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.laobai.pojo.User<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>constructor-arg</span> <span class="token attr-name">index</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>老白1230<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>类型</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token comment">&lt;!-- 第二种方式 类型 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>user2<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.laobai.pojo.User<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>constructor-arg</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>java.lang.String<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>老白2001<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>参数名</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token comment">&lt;!-- 第三种方式 参数名 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>user3<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.laobai.pojo.User<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>constructor-arg</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>老白011230<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>在配置文件加载的时候，容器中管理的对象就已经初始化了</strong></p>
 </li>
 </ol>
-<h2 id="导言区"><a href="#导言区" class="headerlink" title="导言区"></a>导言区</h2><h3 id="引入宏包-usepackage"><a href="#引入宏包-usepackage" class="headerlink" title="引入宏包(\usepackage)"></a>引入宏包(\usepackage)</h3><p>常用的宏包</p>
-<ol>
-<li>ctex 支持中文<blockquote>
-<p>中英混排可以重新设置各个部分标题的输出</p>
-</blockquote>
-</li>
-<li>bookmark</li>
-<li>listing 代码排版</li>
+<h2 id="IDEA中的一些快捷键操作"><a href="#IDEA中的一些快捷键操作" class="headerlink" title="IDEA中的一些快捷键操作"></a>IDEA中的一些快捷键操作</h2><ol>
+<li>CPXAC – ClassPathXmlApplicationContext(大写首字母匹配)</li>
+<li>castvar – 强制类型转换并声明变量</li>
 </ol>
-<h2 id="踩坑集合"><a href="#踩坑集合" class="headerlink" title="踩坑集合"></a>踩坑集合</h2><h3 id="表格跨页和长度问题"><a href="#表格跨页和长度问题" class="headerlink" title="表格跨页和长度问题"></a>表格跨页和长度问题</h3><blockquote>
-<p>2021年12月2日22:40:44</p>
-</blockquote>
-<p>查了一堆资料，最后还是在官方文档里面找到了解决办法<br><img src="/2021/11/28/LaTeX/multirow.jpg"></p>
-<p>附上一段代码</p>
-<pre class="line-numbers language-latex" data-language="latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">longtable</span><span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>|c|c|c|<span class="token punctuation">&#125;</span>
-    <span class="token comment">% Appear table header at the first page as well</span>
-    <span class="token function selector">\hline</span>
-    Option                                               <span class="token punctuation">&amp;</span> Subtotal <span class="token punctuation">&amp;</span> Proportion <span class="token function selector">\\</span>
-    <span class="token function selector">\hline</span>
-    <span class="token function selector">\endfirsthead</span>
-
-    <span class="token comment">% Appear the table header at the top of every page</span>
-    <span class="token function selector">\hline</span>
-    Option                                               <span class="token punctuation">&amp;</span> Subtotal <span class="token punctuation">&amp;</span> Proportion <span class="token function selector">\\</span>
-    <span class="token function selector">\hline</span>
-    <span class="token function selector">\endhead</span>
-
-    <span class="token comment">% % Appear \hline at the bottom of every page</span>
-    <span class="token comment">% \endfoot</span>
-
-    <span class="token comment">% data begins here</span>
-    <span class="token function selector">\multirow</span><span class="token punctuation">&#123;</span>2<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>*<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> Unwilling to take the initiative   <span class="token punctuation">&amp;</span>          <span class="token punctuation">&amp;</span>            <span class="token function selector">\\</span>
-    to express their views in class                      <span class="token punctuation">&amp;</span> 46       <span class="token punctuation">&amp;</span> 65.71\<span class="token comment">%    \\ \hline</span>
-    <span class="token function selector">\multirow</span><span class="token punctuation">&#123;</span>2<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>*<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> Speeches can be very stressful and <span class="token punctuation">&amp;</span>          <span class="token punctuation">&amp;</span>            <span class="token function selector">\\</span>
-    language organization plummets                       <span class="token punctuation">&amp;</span> 52       <span class="token punctuation">&amp;</span> 74.29\<span class="token comment">%    \\ \hline</span>
-    <span class="token function selector">\multirow</span><span class="token punctuation">&#123;</span>2<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>*<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>Fear and anxiety are                <span class="token punctuation">&amp;</span>          <span class="token punctuation">&amp;</span>            <span class="token function selector">\\</span>
-    often felt when you are not alone                    <span class="token punctuation">&amp;</span> 47       <span class="token punctuation">&amp;</span> 67.14\<span class="token comment">%    \\ \hline</span>
-    Afraid of being noticed                              <span class="token punctuation">&amp;</span> 54       <span class="token punctuation">&amp;</span> 77.14\<span class="token comment">%    \\ \hline</span>
-    <span class="token function selector">\multirow</span><span class="token punctuation">&#123;</span>2<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>*<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>Afraid of being laughed at and      <span class="token punctuation">&amp;</span>          <span class="token punctuation">&amp;</span>            <span class="token function selector">\\</span>
-    negatively evaluated                                 <span class="token punctuation">&amp;</span> 41       <span class="token punctuation">&amp;</span> 58.57\<span class="token comment">%    \\ \hline</span>
-    <span class="token function selector">\multirow</span><span class="token punctuation">&#123;</span>2<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>*<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>Eat alone, attend classes alone,    <span class="token punctuation">&amp;</span>          <span class="token punctuation">&amp;</span>            <span class="token function selector">\\</span>
-    and often stay alone                                 <span class="token punctuation">&amp;</span> 31       <span class="token punctuation">&amp;</span> 44.29\<span class="token comment">%    \\ \hline</span>
-    Personality sensitive, suspicious                    <span class="token punctuation">&amp;</span> 37       <span class="token punctuation">&amp;</span> 52.86\<span class="token comment">%    \\ \hline</span>
-    Others                                               <span class="token punctuation">&amp;</span> 1        <span class="token punctuation">&amp;</span> 1.43\<span class="token comment">%     \\ \hline</span>
-    Valid entries                                        <span class="token punctuation">&amp;</span> 70       <span class="token punctuation">&amp;</span> ~          <span class="token function selector">\\</span> <span class="token function selector">\hline</span>
-    <span class="token comment">% more data here</span>
-    <span class="token function selector">\caption</span><span class="token punctuation">&#123;</span>Which of the following behaviors do you think indicates that a person may have social phobia?<span class="token punctuation">&#125;</span>
-    <span class="token function selector">\label</span><span class="token punctuation">&#123;</span><span class="token keyword">Question 2</span><span class="token punctuation">&#125;</span>                                                           <span class="token function selector">\\</span>
-<span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">longtable</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>最终的效果:<br><img src="/2021/11/28/LaTeX/1.jpg"><br>实现了跨页和表格长度的调整</p>
-<h3 id="tabular整体调整大小"><a href="#tabular整体调整大小" class="headerlink" title="tabular整体调整大小"></a>tabular整体调整大小</h3><blockquote>
-<p>2021年12月2日22:47:55</p>
-</blockquote>
-<p>使用resizebox进行整体调整，对table有效，longtable不适用</p>
-<pre class="line-numbers language-latex" data-language="latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">table</span><span class="token punctuation">&#125;</span><span class="token punctuation">[</span>!ht<span class="token punctuation">]</span>
-    <span class="token function selector">\centering</span>
-    <span class="token function selector">\resizebox</span><span class="token punctuation">&#123;</span>.95<span class="token function selector">\columnwidth</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>!<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>
-        <span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">tabular</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>|l|l|l|<span class="token punctuation">&#125;</span>
-            <span class="token function selector">\hline</span>
-            Option                                                            <span class="token punctuation">&amp;</span> Subtotal <span class="token punctuation">&amp;</span> Proportion <span class="token function selector">\\</span> <span class="token function selector">\hline</span>
-            Unwilling to take the initiative to express their views in class  <span class="token punctuation">&amp;</span> 46       <span class="token punctuation">&amp;</span> 65.71\<span class="token comment">%    \\ \hline</span>
-            Speeches can be very stressful and language organization plummets <span class="token punctuation">&amp;</span> 52       <span class="token punctuation">&amp;</span> 74.29\<span class="token comment">%    \\ \hline</span>
-            Fear and anxiety are often felt when you are not alone            <span class="token punctuation">&amp;</span> 47       <span class="token punctuation">&amp;</span> 67.14\<span class="token comment">%    \\ \hline</span>
-            Afraid of being noticed                                           <span class="token punctuation">&amp;</span> 54       <span class="token punctuation">&amp;</span> 77.14\<span class="token comment">%    \\ \hline</span>
-            Afraid of being laughed at and negatively evaluated               <span class="token punctuation">&amp;</span> 41       <span class="token punctuation">&amp;</span> 58.57\<span class="token comment">%    \\ \hline</span>
-            Eat alone, attend classes alone, and often be alone               <span class="token punctuation">&amp;</span> 31       <span class="token punctuation">&amp;</span> 44.29\<span class="token comment">%    \\ \hline</span>
-            Personality sensitive, suspicious                                 <span class="token punctuation">&amp;</span> 37       <span class="token punctuation">&amp;</span> 52.86\<span class="token comment">%    \\ \hline</span>
-            Others                                                            <span class="token punctuation">&amp;</span> 1        <span class="token punctuation">&amp;</span> 1.43\<span class="token comment">%     \\ \hline</span>
-            Valid entries                                                     <span class="token punctuation">&amp;</span> 70       <span class="token punctuation">&amp;</span> ~          <span class="token function selector">\\</span> <span class="token function selector">\hline</span>
-        <span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">tabular</span><span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token function selector">\caption</span><span class="token punctuation">&#123;</span>Which of the following behaviors do you think indicates that a person may have social phobia? <span class="token punctuation">[</span>Multiple choice question<span class="token punctuation">&#125;</span>
-    <span class="token function selector">\label</span><span class="token punctuation">&#123;</span><span class="token keyword">Question 2</span><span class="token punctuation">&#125;</span>
-<span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">table</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>总之就是调表格不是一件容易的事情</p>
-<h3 id="tasks设置label-width"><a href="#tasks设置label-width" class="headerlink" title="tasks设置label_width"></a>tasks设置label_width</h3><p><img src="/2021/11/28/LaTeX/tasks.jpg"><br>不设置可能会报label_width过小的警告</p>
 
                 
             </div>
@@ -617,7 +576,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://www.laobai1230.top/2021/11/28/LaTeX/">http://www.laobai1230.top/2021/11/28/LaTeX/</a>
+                    <a href="http://www.laobai1230.top/2021/12/07/Spring5/">http://www.laobai1230.top/2021/12/07/Spring5/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -655,8 +614,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%86%99%E4%BD%9C/">
-                                    <span class="chip bg-color">写作</span>
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%A1%86%E6%9E%B6/">
+                                    <span class="chip bg-color">框架</span>
                                 </a>
                             
                         </div>
@@ -826,17 +789,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/11/28/Postman/">
+                <a href="/2021/12/07/Spring5/">
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/10.jpg" class="responsive-img" alt="Postman">
+                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="Spring5">
                         
-                        <span class="card-title">Postman</span>
+                        <span class="card-title">Spring5</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -846,9 +810,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-07
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -856,6 +820,19 @@
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%A1%86%E6%9E%B6/">
+                        <span class="chip bg-color">框架</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -867,13 +844,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/11/28/Hexo/">
+                <a href="/2021/12/05/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/20.jpg" class="responsive-img" alt="Hexo">
+                        <img src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/medias/featureimages/3.jpg" class="responsive-img" alt="正则表达式">
                         
-                        <span class="card-title">Hexo</span>
+                        <span class="card-title">正则表达式</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -884,7 +861,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-05
                             </span>
                         <span class="publish-author">
                             
@@ -893,14 +870,6 @@
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%8D%9A%E5%AE%A2/">
-                        <span class="chip bg-color">博客</span>
-                    </a>
-                    
                 </div>
                 
             </div>
