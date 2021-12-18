@@ -9,6 +9,13 @@
   </url>
   
   <url>
+    <loc>http://www.laobai1230.top/2021/11/17/Linux/</loc>
+    
+    <lastmod>2021-12-18</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.laobai1230.top/2021/12/15/CMake/</loc>
     
     <lastmod>2021-12-15</lastmod>
@@ -66,13 +73,6 @@
   
   <url>
     <loc>http://www.laobai1230.top/2021/11/28/LaTeX/</loc>
-    
-    <lastmod>2021-12-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.laobai1230.top/2021/11/17/Linux/</loc>
     
     <lastmod>2021-12-07</lastmod>
     
@@ -270,13 +270,6 @@
   </url>
   
   <url>
-    <loc>http://www.laobai1230.top/tags/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2021-12-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://www.laobai1230.top/tags/Java/</loc>
     <lastmod>2021-12-18</lastmod>
     <changefreq>daily</changefreq>
@@ -284,7 +277,7 @@
   </url>
   
   <url>
-    <loc>http://www.laobai1230.top/tags/Web/</loc>
+    <loc>http://www.laobai1230.top/tags/%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2021-12-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -298,7 +291,7 @@
   </url>
   
   <url>
-    <loc>http://www.laobai1230.top/tags/Linux/</loc>
+    <loc>http://www.laobai1230.top/tags/Web/</loc>
     <lastmod>2021-12-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -306,6 +299,13 @@
   
   <url>
     <loc>http://www.laobai1230.top/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2021-12-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.laobai1230.top/tags/Linux/</loc>
     <lastmod>2021-12-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
