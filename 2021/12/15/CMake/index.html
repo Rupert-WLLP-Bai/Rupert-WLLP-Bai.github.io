@@ -506,8 +506,7 @@
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#ifdef _WIN32
     system(&quot;chcp 65001&quot;);
 #endif<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<ol start="2">
+<ol>
 <li>由于在Windows上编译成VS工程文件时可能会出现字符集的问题，故在顶层CMakeLists.txt中加入了用MSVC编译时的一些选项，即：</li>
 </ol>
 <pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token comment"># MSVC设置</span>
@@ -516,8 +515,7 @@
 <span class="token comment"># 指定为C++11 版本</span>
 <span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="token boolean">ON</span><span class="token punctuation">)</span>
 <span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">11</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ol start="3">
+<ol>
 <li>默认用UTF-8，LF写代码</li>
 </ol>
 
