@@ -469,14 +469,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    563
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    8 分
                 </div>
                 
 
@@ -512,11 +512,11 @@
 <li><strong>单色辐出度</strong>：在物体温度为$T$时，从物体表面单位面积上辐射出的波长介于$\lambda$ 和$\lambda$ +$\mathrm{d} \lambda$ 之间的辐射功率 $\mathrm{d}M$ 与$\mathrm{d} \lambda$的比值：</li>
 </ol>
 <script type="math/tex; mode=display">
-M_{\lambda}(\lambda,T) = \frac {\mathrm{d} M(\lambda,T)}{\mathrm{d} \lambda} \tag{1-1}</script><ol>
+M_{\lambda}(\lambda,T) = \frac {\mathrm{d} M(\lambda,T)}{\mathrm{d} \lambda} \tag{1-1-1}</script><ol>
 <li><strong>辐出度</strong>：用M表示，是温度$T$的函数。在一定温度$T$下，物体表面单位面积发射的包含各种波长在内的辐射总功率：</li>
 </ol>
 <script type="math/tex; mode=display">
-M(T)=\int_{0}^{\infty} M_{\lambda}(\lambda, T) \mathrm{d} \lambda \tag{1-2}</script><ol>
+M(T)=\int_{0}^{\infty} M_{\lambda}(\lambda, T) \mathrm{d} \lambda \tag{1-1-2}</script><ol>
 <li><strong>吸收率</strong>：吸收能量与入射总能量的比值</li>
 <li><strong>单色吸收率</strong>：当辐射从外界入射到温度为$T$的物体表面时，在$\lambda$ 到$\lambda$ +$\mathrm{d} \lambda$的波段内，吸收能量与入射总能量之比，用$a(\lambda ,T)$表示</li>
 <li><strong>黑体</strong>：能够完全吸收外来辐射而没有反射的物体，即$a(\lambda ,T) = 1$</li>
@@ -524,13 +524,174 @@ M(T)=\int_{0}^{\infty} M_{\lambda}(\lambda, T) \mathrm{d} \lambda \tag{1-2}</scr
 <li><strong>基尔霍夫定律</strong>：在同样的温度下，不同的物体或不同表面性质的物体，其单色辐出度与单色吸收率之比是一恒量</li>
 </ol>
 <script type="math/tex; mode=display">
-\phi(\lambda, T)=\frac{M_{1 \lambda}(\lambda, T)}{a_{1}(\lambda, T)}=\frac{M_{2 \lambda}(\lambda, T)}{a_{2}(\lambda, T)}=\cdots=M_{0 \lambda}(\lambda, T) \tag{1-3}</script><ol>
+\phi(\lambda, T)=\frac{M_{1 \lambda}(\lambda, T)}{a_{1}(\lambda, T)}=\frac{M_{2 \lambda}(\lambda, T)}{a_{2}(\lambda, T)}=\cdots=M_{0 \lambda}(\lambda, T) \tag{1-1-3}</script><ol>
 <li><p><strong>黑体是最理想的发射体</strong> </p>
 </li>
 <li><p>一个好的吸收体一定也是一个好的发射体</p>
 <h3 id="1-2-普朗克公式-普朗克量子假设"><a href="#1-2-普朗克公式-普朗克量子假设" class="headerlink" title="1.2 普朗克公式 普朗克量子假设"></a>1.2 普朗克公式 普朗克量子假设</h3></li>
+<li><p>普朗克量子假设：对于频率为 ν 的谐振子，其辐射能量是不连续的， 只能取某一最小能量的整数倍 <strong>$\varepsilon_n = nh\nu$</strong></p>
+</li>
+<li><p>普朗克公式</p>
+</li>
 </ol>
-<h3 id="1-3-光电效应"><a href="#1-3-光电效应" class="headerlink" title="1.3 光电效应"></a>1.3 光电效应</h3><h3 id="1-4-爱因斯坦光量子理论"><a href="#1-4-爱因斯坦光量子理论" class="headerlink" title="1.4 爱因斯坦光量子理论"></a>1.4 爱因斯坦光量子理论</h3><h3 id="1-5-光的波粒二象性"><a href="#1-5-光的波粒二象性" class="headerlink" title="1.5 光的波粒二象性"></a>1.5 光的波粒二象性</h3><h3 id="1-6-康普顿效应"><a href="#1-6-康普顿效应" class="headerlink" title="1.6 康普顿效应"></a>1.6 康普顿效应</h3><h3 id="1-7-氢原子光谱和玻尔理论"><a href="#1-7-氢原子光谱和玻尔理论" class="headerlink" title="1.7 氢原子光谱和玻尔理论"></a>1.7 氢原子光谱和玻尔理论</h3><h3 id="1-8-德布罗意波"><a href="#1-8-德布罗意波" class="headerlink" title="1.8 德布罗意波"></a>1.8 德布罗意波</h3><h3 id="1-9-不确定关系"><a href="#1-9-不确定关系" class="headerlink" title="1.9 不确定关系"></a>1.9 不确定关系</h3><h3 id="1-10-波函数"><a href="#1-10-波函数" class="headerlink" title="1.10 波函数"></a>1.10 波函数</h3><h3 id="1-11-薛定谔方程"><a href="#1-11-薛定谔方程" class="headerlink" title="1.11 薛定谔方程"></a>1.11 薛定谔方程</h3><h3 id="1-12-一维无限深势阱"><a href="#1-12-一维无限深势阱" class="headerlink" title="1.12 一维无限深势阱"></a>1.12 一维无限深势阱</h3><h3 id="1-13-一维势垒"><a href="#1-13-一维势垒" class="headerlink" title="1.13 一维势垒"></a>1.13 一维势垒</h3><h2 id="2-热力学基础"><a href="#2-热力学基础" class="headerlink" title="2 热力学基础"></a>2 热力学基础</h2><h2 id="3-气体动理论"><a href="#3-气体动理论" class="headerlink" title="3 气体动理论"></a>3 气体动理论</h2><h2 id="4-波动光学"><a href="#4-波动光学" class="headerlink" title="4 波动光学"></a>4 波动光学</h2><h2 id="5-振动和波动"><a href="#5-振动和波动" class="headerlink" title="5 振动和波动"></a>5 振动和波动</h2>
+<script type="math/tex; mode=display">
+M_{0}(\lambda, T)=\frac{2 \pi h c^{2}}{\lambda^{5}} \frac{1}{\frac{h c}{\lambda k T}-1} \tag{1-2-1}</script><ol>
+<li>$\varepsilon_n = h\nu$称为<strong>能量子</strong>，$n$称为<strong>量子数</strong></li>
+</ol>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281459206.png" alt="例15-1"></p>
+<h3 id="1-3-光电效应"><a href="#1-3-光电效应" class="headerlink" title="1.3 光电效应"></a>1.3 光电效应</h3><ol>
+<li><p><strong>光电效应</strong>：当一束光照 射在金属表面上时，金 属表面会有电子逸出的现象</p>
+</li>
+<li><p>逸出的电子称为光电子</p>
+</li>
+<li><p>回路中形成电流称为光电流</p>
+</li>
+<li><p>存在<strong>截止频率</strong>（又称<strong>红限</strong>）$\nu_0$</p>
+<ul>
+<li><strong>当入射光的频率$\nu$大于截止频率$\nu_0$时，才能产生光电效应；反之，无论入射光的强度多大，都不能产生光电效应。不同材料的截止频率不同</strong></li>
+<li><p>在<strong>入射光频率不变时，饱和光电流随入射光强度$I$增加而增大</strong>，即：K阴极<strong>逸出的电子数与入射光的强度成正比</strong></p>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281505402.png" alt></p>
+</li>
+<li><p>当加速电压为零时，光电流并不为零，存在遏止电压 $V\varepsilon$</p>
+</li>
+<li>遏止电压与入射光强度无关，但与入射光的频率成正比</li>
+<li>光电子初动能<strong>与入射光的强度无关</strong>，只<strong>与入射光的频率有关</strong></li>
+</ul>
+</li>
+<li><p><strong>截止电压反映了光电子的最大初动能</strong></p>
+</li>
+</ol>
+<script type="math/tex; mode=display">
+e V_{\varepsilon}=\frac{1}{2} m v_{\mathrm{m}}^{2} \tag{1-3-1}</script><ol>
+<li>光电子的动能正比于入射光的频率，而与入射光的振幅（强度）的平方无关。</li>
+<li>当入射光频率$\nu$&lt;红限频率$\nu_0$时，不论光强多大也无光电子逸出。</li>
+<li>不论入射光强度如何，只要入射到金属表面后的$10^{-9}$秒内就能发出光电子。</li>
+</ol>
+<h3 id="1-4-爱因斯坦光量子理论"><a href="#1-4-爱因斯坦光量子理论" class="headerlink" title="1.4 爱因斯坦光量子理论"></a>1.4 爱因斯坦光量子理论</h3><ol>
+<li>爱因斯坦光电效应方程</li>
+</ol>
+<script type="math/tex; mode=display">
+h v=\frac{1}{2} m v_{m}^{2}+W \tag{1-4-1}</script><ol>
+<li>入射光子的能量：$\varepsilon = h\nu = \frac{hc}{\lambda}$</li>
+<li>逸出功：$W_0 = h\nu_0 = \frac{hc}{\lambda_0}$</li>
+<li>红限：$\nu_0 = \frac{W}{h}$</li>
+<li>打出的光电子初动能：$\frac{1}{2} m v<em>{m}^{2}  = eV</em>\varepsilon = h(\nu - \nu_0)$</li>
+<li>产生光电效应的条件光子：$\nu &gt; \nu_0$</li>
+<li>遏止电压：$V_\varepsilon = \frac{h}{e}v - \frac{W}{e}$ ，与<strong>入射光的频率成正比</strong>，比例系数$\frac{h}{e}$<strong>与金属材料的性质无关</strong></li>
+</ol>
+<h3 id="1-5-光的波粒二象性"><a href="#1-5-光的波粒二象性" class="headerlink" title="1.5 光的波粒二象性"></a>1.5 光的波粒二象性</h3><p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281527624.png" alt="光的波粒二象性"></p>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281528092.png" alt="例15-3"></p>
+<h3 id="1-6-康普顿效应"><a href="#1-6-康普顿效应" class="headerlink" title="1.6 康普顿效应"></a>1.6 康普顿效应</h3><ol>
+<li><strong>康普顿散射公式</strong></li>
+</ol>
+<script type="math/tex; mode=display">
+\Delta \lambda=\lambda-\lambda_{0}=\frac{h}{m_{0} c}(1-\cos \theta)=\frac{2 h}{m_{0} c} \sin ^{2} \frac{\theta}{2} \tag{1-6-1}</script><ol>
+<li><strong>证明光子具有动量：$p = \frac{h}{\lambda}$</strong></li>
+<li>公式(1-6-1)中的$\frac{h}{m_0c}$称为康普顿波长</li>
+<li>$\Delta \lambda$(波长偏移量)只取决于$\theta$，与$\lambda$无关</li>
+</ol>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281539603.png" alt="例15-4"></p>
+<h3 id="1-7-氢原子光谱和玻尔理论"><a href="#1-7-氢原子光谱和玻尔理论" class="headerlink" title="1.7 氢原子光谱和玻尔理论"></a>1.7 氢原子光谱和玻尔理论</h3><ol>
+<li><strong>氢原子光谱是具有规律的分立线状光谱</strong></li>
+</ol>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281555916.png" alt="氢原子光谱"></p>
+<ol>
+<li>巴尔末公式($B = 364.6\mathrm{~n}\mathrm{m}$)</li>
+</ol>
+<script type="math/tex; mode=display">
+\lambda = B \frac{n^2}{n^2-2^2} \quad{(n = 3,4,5,\cdots)} \tag{1-7-1}</script><ol>
+<li>里德伯表达式</li>
+</ol>
+<script type="math/tex; mode=display">
+\tilde{v}=R_{\mathrm{H}}\left(\frac{1}{m^{2}}-\frac{1}{n^{2}}\right)=T(m)-T(n) \tag{1-7-2}</script><ol>
+<li>里德伯常数：$R_{\mathrm{H}}=1.096776 \times 10^{7} \mathrm{~m}^{-1}$</li>
+<li>光谱项：$T(n)=\frac{R_{H}}{n^{2}} \quad(\mathrm{n}&gt;\mathrm{m})$</li>
+<li>氢原子光谱的波数</li>
+</ol>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281604426.png" alt="氢原子光谱的波数"></p>
+<ol>
+<li>轨道能量</li>
+</ol>
+<script type="math/tex; mode=display">
+E_{n}=-\frac{m e^{4}}{8 \varepsilon_{0}^{2} h^{2} n^{2}}=\frac{E_{1}}{n^{2}} \tag{1-7-3}</script><ol>
+<li>轨道半径量子化</li>
+</ol>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&r_{n}=a_{0} n^{2} \quad(n=1,2,3, \cdots) \\
+&a_{0}=5.29 \times 10^{-11} \mathrm{~m}
+\end{aligned}</script><ol>
+<li>能量量子化</li>
+</ol>
+<script type="math/tex; mode=display">
+E_{n}=-\frac{m e^{4}}{8 \varepsilon_{o}^{2} h^{2} n^{2}}=\frac{E_{1}}{n^{2}}=-\frac{13.6}{n^{2}}(\mathrm{eV}) \quad(n=1,2,3, \cdots) \tag{1-7-4}</script><ol>
+<li>角动量量子化</li>
+</ol>
+<script type="math/tex; mode=display">
+L=m v r=n \frac{h}{2 \pi}=n \hbar \quad(n=1,2,3, \cdots) \tag{1-7-5}</script><p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281619074.png" alt="例15-6"></p>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112281619568.png" alt="例15-7"></p>
+<h3 id="1-8-德布罗意波"><a href="#1-8-德布罗意波" class="headerlink" title="1.8 德布罗意波"></a>1.8 德布罗意波</h3><ol>
+<li>自然界是对称统一的。实物粒子和光子一样，也具有波 粒二象性。如果用能量 $E$ 和动量 $p$ 来描述实物粒子的粒子 性，则可用频率 $v$ 和波长 $\lambda$ 来表征实物粒子的波动性。</li>
+<li><strong>德布罗意公式</strong> $\quad E=h v \quad p=\frac{h}{\lambda}$</li>
+<li><strong>注意：</strong>实物粒子的波动既不是机械波也不是电磁波，它被称为 “物质波”(matter wave)或“德布罗意波” (de Broglie wave) </li>
+</ol>
+<h3 id="1-9-不确定关系"><a href="#1-9-不确定关系" class="headerlink" title="1.9 不确定关系"></a>1.9 不确定关系</h3><ol>
+<li>海森伯不确定关系</li>
+</ol>
+<script type="math/tex; mode=display">
+\begin{array}{ll}
+\Delta x \cdot \Delta p_{x} \geq \hbar / 2 & \Delta y \cdot \Delta p_{y} \geq \hbar / 2 \\
+\Delta z \cdot \Delta p_{z} \geq \hbar / 2 & \Delta t \cdot \Delta E \geq \hbar / 2
+\end{array}</script><h3 id="1-10-波函数"><a href="#1-10-波函数" class="headerlink" title="1.10 波函数"></a>1.10 波函数</h3><ol>
+<li>1927 波恩(Max Born): 德布罗意波的几率假设 若光波沿 $x$ 方向运动, 则 $E=E_{0} \cos 2 \pi\left(\frac{x}{\lambda}-v t\right)$ </li>
+<li><p>沿 $x$ 方向运动的自由粒子, 其德布罗意波可写为 $\Psi=\Psi<em>{0} \cos 2 \pi\left(\frac{x}{\lambda}-v t\right) \quad$ 或 $\quad \Psi=\Psi</em>{0} e^{i(\vec{k} \cdot \vec{r}-o t)}$ </p>
+<ul>
+<li>$|\vec{k}|=2 \pi / \lambda \quad{\text{波矢; }} \omega=2 \pi v$;</li>
+</ul>
+</li>
+<li><p>$\Psi$ : 波函数</p>
+</li>
+<li><p>爱因斯坦: <strong>$|\vec{E}|^{2}$ 一光子密度的几率量度</strong></p>
+</li>
+<li><p>玻恩: <strong>$|\Psi|^{2}$ 一在给定时间单位空间间隔中发现该粒子的几率</strong></p>
+</li>
+</ol>
+<h3 id="1-11-薛定谔方程"><a href="#1-11-薛定谔方程" class="headerlink" title="1.11 薛定谔方程"></a>1.11 薛定谔方程</h3><ol>
+<li><p><strong>概率密度</strong>： 单位体积内粒子出现的概率，与时间无关</p>
+<script type="math/tex; mode=display">
+|\Psi|^{2}=\Psi \Psi^{*}</script></li>
+<li><p>定态薛定谔方程</p>
+<script type="math/tex; mode=display">
+\left[-\frac{\hbar^{2}}{2 m} \nabla^{2}+V(\vec{r})\right] \psi=E \psi</script></li>
+</ol>
+<ol>
+<li>薛定谔方程</li>
+</ol>
+<script type="math/tex; mode=display">
+i \hbar \frac{\partial}{\partial t} \Psi(\vec{r}, t)=\left[-\frac{\hbar^{2}}{2 m} \nabla^{2}+V(r, t)\right] \Psi(\vec{r}, t)</script><ol>
+<li><p>波函数 $\psi(\vec{r})$ ：单值、有限、连续</p>
+</li>
+<li><p><strong>归一化条件</strong>： $\int_{-\infty}^{\infty}|\psi(\vec{r})|^{2} d \vec{r}=1$</p>
+</li>
+<li><p>与薛定谔方程对应的经典表示式是</p>
+<script type="math/tex; mode=display">
+E=\frac{\vec{p}^{2}}{2 m}+V(\vec{r}, t)</script><p>两者比较, 可看作如下变换</p>
+<script type="math/tex; mode=display">
+\hat{E}=i \hbar \frac{\partial}{\partial t} \quad \hat{\vec{p}}=-i \hbar \nabla=-i \hbar\left(\frac{\partial}{\partial x} \vec{i}+\frac{\partial}{\partial y} \vec{j}+\frac{\partial}{\partial z} \vec{k}\right)</script></li>
+<li><p>薛定谔方程是量子力学基本方程, 它是量子力学<br>的又一基本假设（另一：波函数统计解释）</p>
+</li>
+<li><p>态叠加原理: 若 $\Psi<em>{1}, \Psi</em>{2}, \ldots \Psi<em>{\mathrm{n}}$ 是系统 $\mathrm{n}$ 个可能的态, 那么 $\Psi=c</em>{1} \Psi<em>{1}+c</em>{2} \Psi<em>{2}+\ldots+c</em>{\mathrm{n}} \Psi_{\mathrm{n}}$ 也是系统可能的态。</p>
+</li>
+</ol>
+<h3 id="1-12-一维无限深势阱"><a href="#1-12-一维无限深势阱" class="headerlink" title="1.12 一维无限深势阱"></a>1.12 一维无限深势阱</h3><ol>
+<li>一维无限深势阱 <script type="math/tex; mode=display">
+\quad V(x)= \begin{cases}0 & 0<x<a \\ \infty & x \leq 0, x \geq a\end{cases}</script></li>
+</ol>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}
+\psi_{n}(x)=\sqrt{\frac{2}{a}} \sin \frac{n \pi}{a} x \\
+E=\frac{\pi^{2} \hbar^{2} n^{2}}{2 m a^{2}}
+\end{array} \quad n=1,2,3, \ldots\right.</script><h3 id="1-13-一维势垒"><a href="#1-13-一维势垒" class="headerlink" title="1.13 一维势垒"></a>1.13 一维势垒</h3><h2 id="2-热力学基础"><a href="#2-热力学基础" class="headerlink" title="2 热力学基础"></a>2 热力学基础</h2><h2 id="3-气体动理论"><a href="#3-气体动理论" class="headerlink" title="3 气体动理论"></a>3 气体动理论</h2><h2 id="4-波动光学"><a href="#4-波动光学" class="headerlink" title="4 波动光学"></a>4 波动光学</h2><h2 id="5-振动和波动"><a href="#5-振动和波动" class="headerlink" title="5 振动和波动"></a>5 振动和波动</h2><h2 id="6-清华题库整理"><a href="#6-清华题库整理" class="headerlink" title="6 清华题库整理"></a>6 清华题库整理</h2>
                 
             </div>
             <hr/>
@@ -1077,7 +1238,7 @@ M(T)=\int_{0}^{\infty} M_{\lambda}(\lambda, T) \mathrm{d} \lambda \tag{1-2}</scr
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">7.6k</span>&nbsp;字
+                class="white-color">9.1k</span>&nbsp;字
             
             
             
