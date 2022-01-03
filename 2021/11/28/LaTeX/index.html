@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/css/my.css">
 
     <script src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/libs/jquery/jquery.min.js"></script>
-
+    <link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 
@@ -515,20 +515,19 @@
 </ol>
 <h2 id="导言区"><a href="#导言区" class="headerlink" title="导言区"></a>导言区</h2><h3 id="引入宏包-usepackage"><a href="#引入宏包-usepackage" class="headerlink" title="引入宏包(\usepackage)"></a>引入宏包(\usepackage)</h3><p>常用的宏包</p>
 <ol>
-<li><p>ctex 支持中文</p>
-<blockquote>
+<li>ctex 支持中文<blockquote>
 <p>中英混排可以重新设置各个部分标题的输出</p>
 </blockquote>
 </li>
-<li><p>bookmark</p>
-</li>
+<li>bookmark</li>
 <li>listing 代码排版</li>
 </ol>
 <h2 id="踩坑集合"><a href="#踩坑集合" class="headerlink" title="踩坑集合"></a>踩坑集合</h2><h3 id="表格跨页和长度问题"><a href="#表格跨页和长度问题" class="headerlink" title="表格跨页和长度问题"></a>表格跨页和长度问题</h3><blockquote>
 <p>2021年12月2日22:40:44</p>
 </blockquote>
-<p>查了一堆资料，最后还是在官方文档里面找到了解决办法<br><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920783.jpg" alt></p>
-<p>附上一段代码<br><pre class="line-numbers language-latex" data-language="latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">longtable</span><span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>|c|c|c|<span class="token punctuation">&#125;</span>
+<p>查了一堆资料，最后还是在官方文档里面找到了解决办法<br><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920783.jpg"></p>
+<p>附上一段代码</p>
+<pre class="line-numbers language-latex" data-language="latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">longtable</span><span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>|c|c|c|<span class="token punctuation">&#125;</span>
     <span class="token comment">% Appear table header at the first page as well</span>
     <span class="token function selector">\hline</span>
     Option                                               <span class="token punctuation">&amp;</span> Subtotal <span class="token punctuation">&amp;</span> Proportion <span class="token function selector">\\</span>
@@ -562,12 +561,14 @@
     <span class="token comment">% more data here</span>
     <span class="token function selector">\caption</span><span class="token punctuation">&#123;</span>Which of the following behaviors do you think indicates that a person may have social phobia?<span class="token punctuation">&#125;</span>
     <span class="token function selector">\label</span><span class="token punctuation">&#123;</span><span class="token keyword">Question 2</span><span class="token punctuation">&#125;</span>                                                           <span class="token function selector">\\</span>
-<span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">longtable</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></p>
-<p>最终的效果:<br><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920784.jpg" alt><br>实现了跨页和表格长度的调整</p>
+<span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">longtable</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最终的效果:<br><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920784.jpg"><br>实现了跨页和表格长度的调整</p>
 <h3 id="tabular整体调整大小"><a href="#tabular整体调整大小" class="headerlink" title="tabular整体调整大小"></a>tabular整体调整大小</h3><blockquote>
 <p>2021年12月2日22:47:55</p>
 </blockquote>
-<p>使用resizebox进行整体调整，对table有效，longtable不适用<br><pre class="line-numbers language-latex" data-language="latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">table</span><span class="token punctuation">&#125;</span><span class="token punctuation">[</span>!ht<span class="token punctuation">]</span>
+<p>使用resizebox进行整体调整，对table有效，longtable不适用</p>
+<pre class="line-numbers language-latex" data-language="latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">table</span><span class="token punctuation">&#125;</span><span class="token punctuation">[</span>!ht<span class="token punctuation">]</span>
     <span class="token function selector">\centering</span>
     <span class="token function selector">\resizebox</span><span class="token punctuation">&#123;</span>.95<span class="token function selector">\columnwidth</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>!<span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>
         <span class="token function selector">\begin</span><span class="token punctuation">&#123;</span><span class="token keyword">tabular</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#123;</span>|l|l|l|<span class="token punctuation">&#125;</span>
@@ -586,13 +587,14 @@
     <span class="token punctuation">&#125;</span>
     <span class="token function selector">\caption</span><span class="token punctuation">&#123;</span>Which of the following behaviors do you think indicates that a person may have social phobia? <span class="token punctuation">[</span>Multiple choice question<span class="token punctuation">&#125;</span>
     <span class="token function selector">\label</span><span class="token punctuation">&#123;</span><span class="token keyword">Question 2</span><span class="token punctuation">&#125;</span>
-<span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">table</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></p>
+<span class="token function selector">\end</span><span class="token punctuation">&#123;</span><span class="token keyword">table</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>总之就是调表格不是一件容易的事情</p>
-<h3 id="tasks设置label-width"><a href="#tasks设置label-width" class="headerlink" title="tasks设置label_width"></a>tasks设置label_width</h3><p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920785.jpg" alt><br>不设置可能会报label_width过小的警告</p>
+<h3 id="tasks设置label-width"><a href="#tasks设置label-width" class="headerlink" title="tasks设置label_width"></a>tasks设置label_width</h3><p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920785.jpg"><br>不设置可能会报label_width过小的警告</p>
 <h2 id="常用公式"><a href="#常用公式" class="headerlink" title="常用公式"></a>常用公式</h2><p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920786.png" alt="img"></p>
 <p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920787.png" alt="img"></p>
 <p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920788.png" alt="img"></p>
-<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920789.png" alt></p>
+<p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920789.png"></p>
 <p><img src="https://laobai1230-1251583803.cos.ap-shanghai.myqcloud.com/img/202112271920790.png" alt="img"></p>
 
                 
@@ -1095,7 +1097,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021</span>
+                <span id="year">2021-2022</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">Laobai</a>
@@ -1104,7 +1106,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">9.1k</span>&nbsp;字
+                class="white-color">7.1k</span>&nbsp;字
             
             
             

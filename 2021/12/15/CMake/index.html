@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/css/my.css">
 
     <script src="https://cdn.jsdelivr.net/gh/rupert-wllp-bai/rupert-wllp-bai.github.io/libs/jquery/jquery.min.js"></script>
-
+    <link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 
@@ -506,7 +506,8 @@
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#ifdef _WIN32
     system(&quot;chcp 65001&quot;);
 #endif<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<ol>
+
+<ol start="2">
 <li>由于在Windows上编译成VS工程文件时可能会出现字符集的问题，故在顶层CMakeLists.txt中加入了用MSVC编译时的一些选项，即：</li>
 </ol>
 <pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token comment"># MSVC设置</span>
@@ -515,7 +516,8 @@
 <span class="token comment"># 指定为C++11 版本</span>
 <span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="token boolean">ON</span><span class="token punctuation">)</span>
 <span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">11</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<ol>
+
+<ol start="3">
 <li>默认用UTF-8，LF写代码</li>
 </ol>
 
@@ -1039,7 +1041,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021</span>
+                <span id="year">2021-2022</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">Laobai</a>
@@ -1048,7 +1050,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">9.1k</span>&nbsp;字
+                class="white-color">7.1k</span>&nbsp;字
             
             
             
