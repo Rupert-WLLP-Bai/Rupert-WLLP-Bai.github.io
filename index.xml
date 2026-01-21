@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+      <title>Quartz 4</title>
+      <link>https://quartz.jzhao.xyz</link>
+      <description>Last 10 notes on Quartz 4</description>
+      <generator>Quartz -- quartz.jzhao.xyz</generator>
+      <item>
+    <title>Heavy Ranker (Phoenix)</title>
+    <link>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/Heavy-Ranker-(Phoenix)</link>
+    <guid>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/Heavy-Ranker-(Phoenix)</guid>
+    <description><![CDATA[ 核心打分模型 Heavy Ranker (Phoenix) 是 “For You” Feed 流的核心打分模型，负责通过预测用户互动的概率来对候选推文进行排序。它用纯深度学习方法取代了传统的基于启发式的排序。 模型架构 该模型是从 xAI 的 System Architecture 移植而来的 基于 Grok 的 Transformer。 基础模型: 修改版的 Grok-1 Transformer。 输入序列: [User Context, History Items, Candidate Items] Embedding 策略: 使用基于哈希的 Embedding（每个用户/项目 2 个哈希... ]]></description>
+    <pubDate>Wed, 21 Jan 2026 09:39:29 GMT</pubDate>
+  </item><item>
+    <title>Light Ranker (Thunder &amp; Retrieval)</title>
+    <link>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/Light-Ranker-(Thunder--and--Retrieval)</link>
+    <guid>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/Light-Ranker-(Thunder--and--Retrieval)</guid>
+    <description><![CDATA[ 候选检索阶段 Light Ranker（轻量排序）阶段负责从海量可用内容池中进行候选推文的初步检索。与对少量项目进行计算密集型打分的 Heavy Ranker (Phoenix) 不同，Light Ranker 必须高效地筛选数百万条推文，以找到几千条相关的候选推文。 该阶段聚合了来自两个主要来源的内容：In-Network (Thunder) 和 Out-of-Network (Phoenix Retrieval)。 1. ]]></description>
+    <pubDate>Wed, 21 Jan 2026 09:39:29 GMT</pubDate>
+  </item><item>
+    <title>Scoring Logic</title>
+    <link>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/Scoring-Logic</link>
+    <guid>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/Scoring-Logic</guid>
+    <description><![CDATA[ 加权打分机制 打分逻辑 (Scoring Logic) 将 Heavy Ranker (Phoenix) 预测的原始概率转换为用于最终推文排序的单个标量值。该逻辑在 home-mixer/scorers/weighted_scorer.rs 中实现。 打分公式 最终分数计算为各个互动概率的 加权求和 (Weighted Sum)，并经过归一化处理。 \text{Final Score} = \text{Normalize}(\sum (\text{Weight}_i \times P(\text{Action}_i))) 系统优先考虑建设性的互动（回复、转推）而非被动消费（点击），同时严厉惩罚... ]]></description>
+    <pubDate>Wed, 21 Jan 2026 09:39:29 GMT</pubDate>
+  </item><item>
+    <title>System Architecture</title>
+    <link>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/System-Architecture</link>
+    <guid>https://quartz.jzhao.xyz/posts/OpenSource/X-Algorithm/System-Architecture</guid>
+    <description><![CDATA[ 架构概览 核心推荐系统建立在 Candidate Pipeline（候选人管道） 框架之上，负责协调从内容召回到最终生成排序Feed流的整个数据流程。该架构强调了候选人召回（Sourcing）、数据丰富（Hydration）、过滤（Filtering）和打分（Scoring）之间的关注点分离。 高层数据流 数据流遵循由 **Home Mixer** 管理的线性管道执行流程： .d2-2835631850 .text { font-family: &quot;d2-2835631850-font-regular&quot;; } @font-face { font-family: d2-2835... ]]></description>
+    <pubDate>Wed, 21 Jan 2026 09:39:29 GMT</pubDate>
+  </item><item>
+    <title>AMONG THE CLOUDS</title>
+    <link>https://quartz.jzhao.xyz/posts/AMONG-THE-CLOUDS</link>
+    <guid>https://quartz.jzhao.xyz/posts/AMONG-THE-CLOUDS</guid>
+    <description><![CDATA[ 2026.01.17 guangzhengli.com/courses/kubernetes 一个简短的k8s教程 guangzhengli.com/blog/zh/indie-hacker-tech-stack-2024 独立开发者技术栈推荐 guangzhengli.com/blog/zh/indie-hacker-poor-stack 独立开发者云平台推荐(Cloudflare) github.com/lbjlaq/Antigravity-Manager 目前最好用的 Gemini 反代工具 github.com/code-yeongyu/oh-my-opencode OpenCode ... ]]></description>
+    <pubDate>Tue, 20 Jan 2026 15:55:46 GMT</pubDate>
+  </item><item>
+    <title>Bazel</title>
+    <link>https://quartz.jzhao.xyz/posts/Cpp/Bazel</link>
+    <guid>https://quartz.jzhao.xyz/posts/Cpp/Bazel</guid>
+    <description><![CDATA[ Bazel Bazel是一个非常流行的构建工具，特别适合用于构建大型的软件项目，本文将详细介绍它的基本概念和如何使用它来构建C++项目。 什么是Bazel？ Bazel是一个由Google开发的构建工具，它的主要目标是提高构建速度和可重现性。与其他构建工具相比，Bazel最大的优点是它能够利用缓存系统来加速构建过程，并且只会重新构建那些需要更新的部分。 Bazel的核心概念 在开始使用Bazel之前，我们需要了解一些其核心概念： Target 在Bazel中，Target是指一个构建目标，它可以是一个二进制文件、一个库文件、一个测试文件或者其他一些需要构建的东西。每个Target都必须有一个唯... ]]></description>
+    <pubDate>Tue, 20 Jan 2026 15:55:46 GMT</pubDate>
+  </item><item>
+    <title>DOWN TO EARTH</title>
+    <link>https://quartz.jzhao.xyz/posts/DOWN-TO-EARTH</link>
+    <guid>https://quartz.jzhao.xyz/posts/DOWN-TO-EARTH</guid>
+    <description><![CDATA[ 2026-01-20 DONE 高程作业 迁移到 Rust 加入 AWS Builder ID 自动化注册技术总结项目的备用邮箱添加逻辑 2026-01-19 TODO AWS Builder ID 二次开发 Robust，结合Kiro 注册机的基础代码继续开发 SOLSCAN 继续探索其他函数组合使用 探索多agent场景下 日志输出帮助agent进行调试的方式 (重定向 结合 tail -f) 或者更高级的方式 Outlook，AWS网站的登录验证逻辑，返回给用户的参数有哪些，作用是什么 浏览器headless是怎么做的，undetected chrome是怎么做的，指纹保护是什么，为什么... ]]></description>
+    <pubDate>Tue, 20 Jan 2026 15:55:46 GMT</pubDate>
+  </item><item>
+    <title>Rust-Roadmap</title>
+    <link>https://quartz.jzhao.xyz/posts/Rust/Rust-Roadmap</link>
+    <guid>https://quartz.jzhao.xyz/posts/Rust/Rust-Roadmap</guid>
+    <description><![CDATA[ Rust Roadmap 实现一个引用父节点和兄弟节点的树 2026.01.19 Weak, RefCell, Rc 的使用 01-basics Variable Shadowing 变量遮蔽, x的生命周期只在各自的作用域内有效: fn test_variable_scopes() { let x = 5; { let x = x * 2; assert_eq!(x, 10); } assert_eq!(x, 5); } 类似地, 改变类型也是允许的: let _x = 5; // i32 let _x = _x + 1; // i32 let _x = &quot;six&quot;; /... ]]></description>
+    <pubDate>Tue, 20 Jan 2026 15:55:46 GMT</pubDate>
+  </item><item>
+    <title>AWS Builder ID 自动化注册技术总结</title>
+    <link>https://quartz.jzhao.xyz/posts/SecondaryDevelopment/AWS-Builder-ID-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B3%A8%E5%86%8C%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93</link>
+    <guid>https://quartz.jzhao.xyz/posts/SecondaryDevelopment/AWS-Builder-ID-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B3%A8%E5%86%8C%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93</guid>
+    <description><![CDATA[ 目录 项目概述 Outlook OAuth2 登录验证逻辑 AWS Builder ID 登录验证逻辑 AIClient-2-API 对 Kiro 的处理 完整自动化脚本实现 技术要点与最佳实践 常见问题与解决方案 项目概述 本项目实现了 AWS Builder ID 的完全自动化注册流程，包括： Outlook 邮箱的离线验证码获取（通过 Microsoft Graph API） AWS Builder ID 注册流程的浏览器自动化 与 AIClient-2-API 的集成，实现 Claude Kiro 模型的自动化调用 技术栈： Electron + TypeScript（桌面应用） Pu... ]]></description>
+    <pubDate>Mon, 19 Jan 2026 10:32:19 GMT</pubDate>
+  </item><item>
+    <title>AIClient Secondary Development - API Features</title>
+    <link>https://quartz.jzhao.xyz/posts/SecondaryDevelopment/AIClient-2-API</link>
+    <guid>https://quartz.jzhao.xyz/posts/SecondaryDevelopment/AIClient-2-API</guid>
+    <description><![CDATA[ TODO 2026.01.18 设计更好的插件式架构，每次合并main分支的时候可以最少的处理冲突 设计如何集成Minimax M2.1和GLM4.7，同样采用LRU轮询 二次开发功能 1. ]]></description>
+    <pubDate>Mon, 19 Jan 2026 09:18:56 GMT</pubDate>
+  </item>
+    </channel>
+  </rss>

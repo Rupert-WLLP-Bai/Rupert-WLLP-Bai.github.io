@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head><title>7-22-腾讯-IEG-光子工作室-后台开发-一面</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;family=IBM Plex Mono:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="Quartz 4"/><meta property="og:title" content="7-22-腾讯-IEG-光子工作室-后台开发-一面"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="7-22-腾讯-IEG-光子工作室-后台开发-一面"/><meta name="twitter:description" content="问题和回答记录 介绍分布式KV项目（答：Raft, ReadIndex, Pebble, Redis, Snapshot, StatefulSet, HeadlessService, Region分裂） 讲一下Raft过程（答：背诵） 故障恢复怎么做的（答：日志回放，重新选举，网络分区） Raft会出现多个Leader的情况吗（答：网络分区导致脑裂会出现） LSM Tree 写放大（答：Compaction，多次写入之后flush，然后合并SSTable，导致数据重复） 服务发现是怎么做的（答：StatefulSet保证DNS分配有序增长，Headless Service保证没有cluster..."/><meta property="og:description" content="问题和回答记录 介绍分布式KV项目（答：Raft, ReadIndex, Pebble, Redis, Snapshot, StatefulSet, HeadlessService, Region分裂） 讲一下Raft过程（答：背诵） 故障恢复怎么做的（答：日志回放，重新选举，网络分区） Raft会出现多个Leader的情况吗（答：网络分区导致脑裂会出现） LSM Tree 写放大（答：Compaction，多次写入之后flush，然后合并SSTable，导致数据重复） 服务发现是怎么做的（答：StatefulSet保证DNS分配有序增长，Headless Service保证没有cluster..."/><meta property="og:image:alt" content="问题和回答记录 介绍分布式KV项目（答：Raft, ReadIndex, Pebble, Redis, Snapshot, StatefulSet, HeadlessService, Region分裂） 讲一下Raft过程（答：背诵） 故障恢复怎么做的（答：日志回放，重新选举，网络分区） Raft会出现多个Leader的情况吗（答：网络分区导致脑裂会出现） LSM Tree 写放大（答：Compaction，多次写入之后flush，然后合并SSTable，导致数据重复） 服务发现是怎么做的（答：StatefulSet保证DNS分配有序增长，Headless Service保证没有cluster..."/><meta property="twitter:domain" content="quartz.jzhao.xyz"/><meta property="og:url" content="https://quartz.jzhao.xyz/posts/Recruitment/7-22-腾讯-IEG-光子工作室-后台开发-一面"/><meta property="twitter:url" content="https://quartz.jzhao.xyz/posts/Recruitment/7-22-腾讯-IEG-光子工作室-后台开发-一面"/><link rel="icon" href="../../static/icon.png"/><meta name="description" content="问题和回答记录 介绍分布式KV项目（答：Raft, ReadIndex, Pebble, Redis, Snapshot, StatefulSet, HeadlessService, Region分裂） 讲一下Raft过程（答：背诵） 故障恢复怎么做的（答：日志回放，重新选举，网络分区） Raft会出现多个Leader的情况吗（答：网络分区导致脑裂会出现） LSM Tree 写放大（答：Compaction，多次写入之后flush，然后合并SSTable，导致数据重复） 服务发现是怎么做的（答：StatefulSet保证DNS分配有序增长，Headless Service保证没有cluster..."/><meta name="generator" content="Quartz"/><link href="../../index.css" rel="stylesheet" type="text/css" data-persist="true"/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL2hvbWUvcnVubmVyL3dvcmsvcXVhcnR6LWJsb2cvcXVhcnR6LWJsb2cvcXVhcnR6L2NvbXBvbmVudHMvc3R5bGVzIiwic291cmNlcyI6WyJtZXJtYWlkLmlubGluZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFHRjtFQUNFOzs7QUFLRjtFQUNFO0VBQ0E7OztBQUlKO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFOztBQUdGO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFJSjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7O0FBR0Y7RUFDRTs7QUFJRjtFQUNFO0VBQ0E7RUFDQSIsInNvdXJjZXNDb250ZW50IjpbIi5leHBhbmQtYnV0dG9uIHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbG9hdDogcmlnaHQ7XG4gIHBhZGRpbmc6IDAuNHJlbTtcbiAgbWFyZ2luOiAwLjNyZW07XG4gIHJpZ2h0OiAwOyAvLyBOT1RFOiByaWdodCB3aWxsIGJlIHNldCBpbiBtZXJtYWlkLmlubGluZS50c1xuICBjb2xvcjogdmFyKC0tZ3JheSk7XG4gIGJvcmRlci1jb2xvcjogdmFyKC0tZGFyayk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWxpZ2h0KTtcbiAgYm9yZGVyOiAxcHggc29saWQ7XG4gIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgb3BhY2l0eTogMDtcbiAgdHJhbnNpdGlvbjogMC4ycztcblxuICAmID4gc3ZnIHtcbiAgICBmaWxsOiB2YXIoLS1saWdodCk7XG4gICAgZmlsdGVyOiBjb250cmFzdCgwLjMpO1xuICB9XG5cbiAgJjpob3ZlciB7XG4gICAgY3Vyc29yOiBwb2ludGVyO1xuICAgIGJvcmRlci1jb2xvcjogdmFyKC0tc2Vjb25kYXJ5KTtcbiAgfVxuXG4gICY6Zm9jdXMge1xuICAgIG91dGxpbmU6IDA7XG4gIH1cbn1cblxucHJlIHtcbiAgJjpob3ZlciA+IC5leHBhbmQtYnV0dG9uIHtcbiAgICBvcGFjaXR5OiAxO1xuICAgIHRyYW5zaXRpb246IDAuMnM7XG4gIH1cbn1cblxuI21lcm1haWQtY29udGFpbmVyIHtcbiAgcG9zaXRpb246IGZpeGVkO1xuICBjb250YWluOiBsYXlvdXQ7XG4gIHotaW5kZXg6IDk5OTtcbiAgbGVmdDogMDtcbiAgdG9wOiAwO1xuICB3aWR0aDogMTAwdnc7XG4gIGhlaWdodDogMTAwdmg7XG4gIG92ZXJmbG93OiBoaWRkZW47XG4gIGRpc3BsYXk6IG5vbmU7XG4gIGJhY2tkcm9wLWZpbHRlcjogYmx1cig0cHgpO1xuICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDAsIDAsIDAuNSk7XG5cbiAgJi5hY3RpdmUge1xuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgfVxuXG4gICYgPiAjbWVybWFpZC1zcGFjZSB7XG4gICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1saWdodCk7XG4gICAgYm9yZGVyLXJhZGl1czogNXB4O1xuICAgIHBvc2l0aW9uOiBmaXhlZDtcbiAgICB0b3A6IDUwJTtcbiAgICBsZWZ0OiA1MCU7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7XG4gICAgaGVpZ2h0OiA4MHZoO1xuICAgIHdpZHRoOiA4MHZ3O1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG5cbiAgICAmID4gLm1lcm1haWQtY29udGVudCB7XG4gICAgICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gICAgICB0cmFuc2Zvcm0tb3JpZ2luOiAwIDA7XG4gICAgICB0cmFuc2l0aW9uOiB0cmFuc2Zvcm0gMC4xcyBlYXNlO1xuICAgICAgb3ZlcmZsb3c6IHZpc2libGU7XG4gICAgICBtaW4taGVpZ2h0OiAyMDBweDtcbiAgICAgIG1pbi13aWR0aDogMjAwcHg7XG5cbiAgICAgIHByZSB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgYm9yZGVyOiBub25lO1xuICAgICAgfVxuXG4gICAgICBzdmcge1xuICAgICAgICBtYXgtd2lkdGg6IG5vbmU7XG4gICAgICAgIGhlaWdodDogYXV0bztcbiAgICAgIH1cbiAgICB9XG5cbiAgICAmID4gLm1lcm1haWQtY29udHJvbHMge1xuICAgICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgICAgYm90dG9tOiAyMHB4O1xuICAgICAgcmlnaHQ6IDIwcHg7XG4gICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgZ2FwOiA4cHg7XG4gICAgICBwYWRkaW5nOiA4cHg7XG4gICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodCk7XG4gICAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgYm9yZGVyLXJhZGl1czogNnB4O1xuICAgICAgYm94LXNoYWRvdzogMCAycHggNHB4IHJnYmEoMCwgMCwgMCwgMC4xKTtcbiAgICAgIHotaW5kZXg6IDI7XG5cbiAgICAgIC5tZXJtYWlkLWNvbnRyb2wtYnV0dG9uIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgICAgIHdpZHRoOiAzMnB4O1xuICAgICAgICBoZWlnaHQ6IDMycHg7XG4gICAgICAgIHBhZGRpbmc6IDA7XG4gICAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0KTtcbiAgICAgICAgY29sb3I6IHZhcigtLWRhcmspO1xuICAgICAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICAgICAgZm9udC1zaXplOiAxNnB4O1xuICAgICAgICBmb250LWZhbWlseTogdmFyKC0tYm9keUZvbnQpO1xuICAgICAgICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlO1xuXG4gICAgICAgICY6aG92ZXIge1xuICAgICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIH1cblxuICAgICAgICAmOmFjdGl2ZSB7XG4gICAgICAgICAgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKDFweCk7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBTdHlsZSB0aGUgcmVzZXQgYnV0dG9uIGRpZmZlcmVudGx5XG4gICAgICAgICY6bnRoLWNoaWxkKDIpIHtcbiAgICAgICAgICB3aWR0aDogYXV0bztcbiAgICAgICAgICBwYWRkaW5nOiAwIDEycHg7XG4gICAgICAgICAgZm9udC1zaXplOiAxNHB4O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9XG59XG4iXX0= */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" data-persist="true"/><script src="../../prescript.js" type="application/javascript" data-persist="true"></script><script type="application/javascript" data-persist="true">const fetchData = fetch("../../static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://quartz.jzhao.xyz/index.xml"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image" content="https://quartz.jzhao.xyz/posts/Recruitment/7-22-腾讯-IEG-光子工作室-后台开发-一面-og-image.webp"/><meta property="og:image:url" content="https://quartz.jzhao.xyz/posts/Recruitment/7-22-腾讯-IEG-光子工作室-后台开发-一面-og-image.webp"/><meta name="twitter:image" content="https://quartz.jzhao.xyz/posts/Recruitment/7-22-腾讯-IEG-光子工作室-后台开发-一面-og-image.webp"/><meta property="og:image:type" content="image/.webp"/></head><body data-slug="posts/Recruitment/7-22-腾讯-IEG-光子工作室-后台开发-一面"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h2 class="page-title"><a href="../..">Quartz 4</a></h2><div class="spacer mobile-only"></div><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><div class="search"><button class="search-button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg><p>Search</p></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div class="search-layout" data-preview="true"></div></div></div></div></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="Dark mode"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="Light mode"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="readermode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="readerIcon" fill="currentColor" stroke="currentColor" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round" width="64px" height="64px" viewBox="0 0 24 24" aria-label="Reader mode"><title>Reader mode</title><g transform="translate(-1.8, -1.8) scale(1.15, 1.2)"><path d="M8.9891247,2.5 C10.1384702,2.5 11.2209868,2.96705384 12.0049645,3.76669482 C12.7883914,2.96705384 13.8709081,2.5 15.0202536,2.5 L18.7549359,2.5 C19.1691495,2.5 19.5049359,2.83578644 19.5049359,3.25 L19.5046891,4.004 L21.2546891,4.00457396 C21.6343849,4.00457396 21.9481801,4.28672784 21.9978425,4.6528034 L22.0046891,4.75457396 L22.0046891,20.25 C22.0046891,20.6296958 21.7225353,20.943491 21.3564597,20.9931534 L21.2546891,21 L2.75468914,21 C2.37499337,21 2.06119817,20.7178461 2.01153575,20.3517706 L2.00468914,20.25 L2.00468914,4.75457396 C2.00468914,4.37487819 2.28684302,4.061083 2.65291858,4.01142057 L2.75468914,4.00457396 L4.50368914,4.004 L4.50444233,3.25 C4.50444233,2.87030423 4.78659621,2.55650904 5.15267177,2.50684662 L5.25444233,2.5 L8.9891247,2.5 Z M4.50368914,5.504 L3.50468914,5.504 L3.50468914,19.5 L10.9478955,19.4998273 C10.4513189,18.9207296 9.73864328,18.5588115 8.96709342,18.5065584 L8.77307039,18.5 L5.25444233,18.5 C4.87474657,18.5 4.56095137,18.2178461 4.51128895,17.8517706 L4.50444233,17.75 L4.50368914,5.504 Z M19.5049359,17.75 C19.5049359,18.1642136 19.1691495,18.5 18.7549359,18.5 L15.2363079,18.5 C14.3910149,18.5 13.5994408,18.8724714 13.0614828,19.4998273 L20.5046891,19.5 L20.5046891,5.504 L19.5046891,5.504 L19.5049359,17.75 Z M18.0059359,3.999 L15.0202536,4 L14.8259077,4.00692283 C13.9889509,4.06666544 13.2254227,4.50975805 12.7549359,5.212 L12.7549359,17.777 L12.7782651,17.7601316 C13.4923805,17.2719483 14.3447024,17 15.2363079,17 L18.0059359,16.999 L18.0056891,4.798 L18.0033792,4.75457396 L18.0056891,4.71 L18.0059359,3.999 Z M8.9891247,4 L6.00368914,3.999 L6.00599909,4.75457396 L6.00599909,4.75457396 L6.00368914,4.783 L6.00368914,16.999 L8.77307039,17 C9.57551536,17 10.3461406,17.2202781 11.0128313,17.6202194 L11.2536891,17.776 L11.2536891,5.211 C10.8200889,4.56369974 10.1361548,4.13636104 9.37521067,4.02745763 L9.18347055,4.00692283 L8.9891247,4 Z"></path></g></svg></button></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,b)=>!a.isFolder&amp;&amp;!b.isFolder||a.isFolder&amp;&amp;b.isFolder?a.displayName.localeCompare(b.displayName,void 0,{numeric:!0,sensitivity:\&quot;base\&quot;}):!a.isFolder&amp;&amp;b.isFolder?1:-1&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-140"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>Explorer</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-140" class="explorer-content" aria-expanded="false" role="group"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div></div><div class="center"><div class="page-header"><div class="popover-hint"><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="../../">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../posts/">posts</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../posts/Recruitment/">Recruitment</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>7 22 腾讯 IEG 光子工作室 后台开发 一面</a></div></nav><h1 class="article-title">7-22-腾讯-IEG-光子工作室-后台开发-一面</h1><p show-comma="true" class="content-meta">Created: <time datetime="2025-07-24T17:31:45.000Z">Jul 24, 2025</time> • Updated: <time datetime="2026-01-16T16:22:24.000Z">Jan 16, 2026</time><span>28 min read</span></p><ul class="tags"><li><a href="../../tags/Recruitment" class="internal tag-link">Recruitment</a></li><li><a href="../../tags/Tencent" class="internal tag-link">Tencent</a></li><li><a href="../../tags/Backend" class="internal tag-link">Backend</a></li><li><a href="../../tags/GameDevelopment" class="internal tag-link">GameDevelopment</a></li><li><a href="../../tags/TencentIEG" class="internal tag-link">TencentIEG</a></li><li><a href="../../tags/PhotonStudio" class="internal tag-link">PhotonStudio</a></li><li><a href="../../tags/Interview" class="internal tag-link">Interview</a></li></ul></div></div><article class="popover-hint"><h2 id="问题和回答记录">问题和回答记录<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#问题和回答记录" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ol>
+<li>
+<p>介绍分布式KV项目（答：Raft, ReadIndex, Pebble, Redis, Snapshot, StatefulSet, HeadlessService, Region分裂）</p>
+</li>
+<li>
+<p>讲一下Raft过程（答：背诵）</p>
+</li>
+<li>
+<p>故障恢复怎么做的（答：日志回放，重新选举，网络分区）</p>
+</li>
+<li>
+<p>Raft会出现多个Leader的情况吗（答：网络分区导致脑裂会出现）</p>
+</li>
+<li>
+<p>LSM Tree 写放大（答：Compaction，多次写入之后flush，然后合并SSTable，导致数据重复）</p>
+</li>
+<li>
+<p>服务发现是怎么做的（答：StatefulSet保证DNS分配有序增长，Headless Service保证没有cluster IP，不走负载均衡，DNS查询返回所有Pod 的 IP列表，然后Golang层面AddNode，由Leader发起ConfChange，把新节点加入到集群）</p>
+</li>
+<li>
+<p>这里具体是怎么配置（答：有点不清楚想问什么，yaml中配置，然后具体做是一个静态的表）</p>
+</li>
+<li>
+<p>这里AddNode如果有很多个请求怎么办（答：串行，ProposeConfChange）</p>
+</li>
+<li>
+<p>那如果ConfChange冲突怎么解决（答：不清楚怎么解决，就说应用层就已经限制串行了，必须commit+apply，不可能冲突）</p>
+</li>
+<li>
+<p>极端环境下出现脑裂怎么解决（答：少于半数不可用，停止写入，保证一致性）</p>
+</li>
+<li>
+<p>日志同步丢包怎么办（答：定期压缩快照，项目中有实现这一点，可以做断点续传）</p>
+</li>
+<li>
+<p>会出现多个节点超过半数吗（答：不可能，Raft是多数投票一次性）</p>
+</li>
+<li>
+<p>k8s多个pod，怎么发现这个新的pod</p>
+</li>
+<li>
+<p>秒杀系统讲一下</p>
+</li>
+<li>
+<p>为什么用etcd来做，redlock是怎么做的（答：CP系统，redlock用setnx）</p>
+</li>
+<li>
+<p>redlock的问题在哪里（答：AP可能不一致，可能惊群）</p>
+</li>
+<li>
+<p>etcd怎么保证这个强一致性（答：lease租约，txn）</p>
+</li>
+<li>
+<p>假设多个进程获取一个分布式锁，这个场景会发生什么</p>
+</li>
+<li>
+<p>这里锁漂移是怎么发生的</p>
+</li>
+<li>
+<p>假设一个进程拿到了锁，但是执行的任务很复杂，需要阻塞等待，超过了TTL，如何保证不会把别人的锁给释放掉，相当于这个锁已经被另外一个线程拿到了，但是原有的进程还是会触发一次释放</p>
+</li>
+<li>
+<p>时间戳好像不能解决这个问题，还有没有什么办法（答：Redis存一个锁的key和一个进程的pid）</p>
+</li>
+<li>
+<p>Redis这个方案稍微有点复杂，能保证原子吗（答：用lua保证）</p>
+</li>
+<li>
+<p>保证原子的情况下，有没有更简单的方案（答：compare and delete，不清楚具体怎么做）</p>
+</li>
+<li>
+<p>C++ 内存分区了解吗（答：代码段，数据段，堆，栈等）</p>
+</li>
+<li>
+<p>什么时候这个变量是放到栈上，什么时候放到堆上（答：malloc，new，直接声明）</p>
+</li>
+<li>
+<p>malloc和new有什么区别（答：malloc返回void*，new加一个指针类型的强制转换）</p>
+</li>
+<li>
+<p>除了这个类型转换还有什么（答：构造？）</p>
+</li>
+<li>
+<p>虚函数是什么（答：类似接口，子类override）</p>
+</li>
+<li>
+<p>构造函数能是虚函数吗（答：不能，构造之后才有虚函数表，构造函数为虚函数逻辑上矛盾）</p>
+</li>
+<li>
+<p>虚函数表存在哪里</p>
+</li>
+<li>
+<p>运行时多态是怎么实现的</p>
+</li>
+<li>
+<p>C++的unordered_map和map的底层</p>
+</li>
+<li>
+<p>C++的vector的底层</p>
+</li>
+<li>
+<p>Golang的map呢</p>
+</li>
+<li>
+<p>链地址法和开放地址法</p>
+</li>
+<li>
+<p>SQL问题，Province，PlayerID，给出每个省份的Player数量（答：GroupBy，Count）</p>
+</li>
+<li>
+<p>Linux常用的命令（答：随便说，说不完）</p>
+</li>
+<li>
+<p>怎么查看一个进程占用的内存 （答：ps或者htop）</p>
+</li>
+<li>
+<p>ps -ef能看到哪些内容（答：PID，父进程PID，虚拟内存占用，启动Command）</p>
+</li>
+<li>
+<p>合并K个升序链表（答：分治）</p>
+</li>
+<li>
+<p>时间复杂度呢（答：K<em>N</em>logK，问有没有更快的方式，答：堆）</p>
+</li>
+<li>
+<p>具体怎么做（答：每一次把头结点放进去，然后top取出之后把node.next放进堆）</p>
+</li>
+<li>
+<p>实现具体代码（5min，main函数没写完，时间到了）</p>
+</li>
+<li>
+<p>还漏了一个关于RPC的问题，这个分布式kv有用到RPC吗，如果我需要调用一个RPC服务，我需要传什么内容</p>
+</li>
+</ol>
+<blockquote>
+<p>答：需要传入服务地址，方法名，参数等内容。具体来说:</p>
+<ul>
+<li>服务地址：RPC 服务的 IP 和端口</li>
+<li>方法名：要调用的具体方法名称</li>
+<li>参数：调用方法所需的参数，如果使用 protobuf 或 JSON 等序列化格式，需要将参数序列化为字节流</li>
+<li>返回值：RPC 调用完成后会返回结果，通常也是序列化后的字节流，需要反序列化为具体类型</li>
+<li>错误处理：需要处理网络异常、超时等错误情况</li>
+<li>认证信息：如果服务需要认证，可能还需要传入 token 或其他认证信息</li>
+</ul>
+</blockquote>
+<h2 id="面试问题和标准答案">面试问题和标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#面试问题和标准答案" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="1-介绍一下你的分布式-kv-存储项目">1. 介绍一下你的分布式 KV 存储项目<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#1-介绍一下你的分布式-kv-存储项目" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 做一致性，ReadIndex 提供只读请求快速处理，Pebble 是底层 LSM 存储引擎，Redis 做热点缓存，Snapshot 支持快照压缩恢复，K8s 使用 StatefulSet 和 HeadlessService 实现服务发现，支持 Region 分裂扩展。</p>
+<h4 id="标准答案">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>本系统是基于 Raft 的多节点分布式 Key-Value 存储，支持强一致性、动态扩容、持久化与缓存协同等特性：</p>
+<ul>
+<li><strong>一致性保证</strong>：使用 Raft 算法选主和同步日志。</li>
+<li><strong>读优化</strong>：支持 ReadIndex 实现线性一致的只读查询。</li>
+<li><strong>存储引擎</strong>：底层基于 Pebble（一个 RocksDB 的替代实现），实现 LSM Tree 存储。</li>
+<li><strong>缓存加速</strong>：前置 Redis 缓存热点键值对。</li>
+<li><strong>集群扩展</strong>：Region 分裂和动态迁移支持扩容。</li>
+<li><strong>Kubernetes 部署</strong>：使用 StatefulSet 保证节点 DNS 顺序，Headless Service 支持服务发现。</li>
+</ul>
+<hr/>
+<h3 id="2-请详细讲一下-raft-协议的流程">2. 请详细讲一下 Raft 协议的流程<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#2-请详细讲一下-raft-协议的流程" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-1">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 协议有三种角色，选举阶段 Candidate 拉票，成为 Leader 后发心跳维持领导地位，日志复制靠 AppendEntries，提交后同步到状态机。</p>
+<h4 id="标准答案-1">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 协议包含以下关键流程：</p>
+<ul>
+<li><strong>角色</strong>：Follower、Candidate、Leader</li>
+<li><strong>选举</strong>：Follower 超时转 Candidate，发起投票，获得多数变 Leader。</li>
+<li><strong>心跳</strong>：Leader 周期性发心跳维持领导权。</li>
+<li><strong>日志复制</strong>：Leader 追加日志，Follower 接收并存储。</li>
+<li><strong>提交日志</strong>：当多数节点确认某日志后，Leader 提交日志，并通知 Follower 提交。</li>
+<li><strong>故障恢复</strong>：新 Leader 会对未对齐日志的 Follower 进行回滚和补齐。</li>
+</ul>
+<hr/>
+<h3 id="3-raft-协议中的故障恢复是如何做的">3. Raft 协议中的故障恢复是如何做的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#3-raft-协议中的故障恢复是如何做的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-2">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-2" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>通过重新选主、日志回放、快照压缩，网络分区后恢复通信可以自动同步。</p>
+<h4 id="标准答案-2">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-2" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>选主机制保证出现故障时可以快速选出新 Leader（&lt;1s）。</li>
+<li>落后节点通过 Raft 的日志或快照补齐。</li>
+<li>定期生成快照压缩日志，减小恢复代价。</li>
+<li>网络恢复后旧 Leader 会降级为 Follower。</li>
+</ul>
+<hr/>
+<h3 id="4-raft-是否可能出现多个-leader">4. Raft 是否可能出现多个 Leader？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#4-raft-是否可能出现多个-leader" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-3">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-3" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>是的，在网络分区导致脑裂的时候可能多个节点都选举成功。</p>
+<h4 id="标准答案-3">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-3" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>在网络分区的情况下，不同分区可能都能获得超过半数选票，从而出现多个 Leader。但由于 Raft 中选票不能重复投，因此严格意义上同一任期只能有一个 Leader，多个 Leader 情况最终会被回收/降级。</p>
+<hr/>
+<h3 id="5-请解释一下-lsm-tree-的写放大问题">5. 请解释一下 LSM Tree 的写放大问题<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#5-请解释一下-lsm-tree-的写放大问题" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-4">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-4" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>每次写入都先写内存表，flush 成 SSTable 后还要 Compaction，多次合并导致多次写磁盘。</p>
+<h4 id="标准答案-4">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-4" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>LSM Tree 通过内存 MemTable 进行写缓冲，然后 flush 为 SSTable 文件。Compaction 是把多个 SSTable 文件合并成更大的一层，会引发<strong>多次写入相同 key</strong>，导致写放大。比如一个 key 写入一次，在 compaction 时可能会重写 3-5 次。</p>
+<hr/>
+<h3 id="6-在你们系统中服务发现是怎么做的">6. 在你们系统中，服务发现是怎么做的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#6-在你们系统中服务发现是怎么做的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-5">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-5" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>StatefulSet 保证 Pod 命名有序，HeadlessService 返回所有 Pod IP，Leader 解析 IP 并通过 ConfChange 加入节点。</p>
+<h4 id="标准答案-5">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-5" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>使用 K8s 的 StatefulSet 和 Headless Service：</p>
+<ul>
+<li>StatefulSet 确保 pod 命名顺序和稳定 DNS（如 <code>kv-0.kv-headless.default.svc.cluster.local</code>）。</li>
+<li>Headless Service 不提供负载均衡，返回所有 pod 的真实 IP。</li>
+<li>业务层使用 DNS 查询 Pod 列表，由当前 Leader 发起 Raft 的 ConfChange 请求注册新节点。</li>
+</ul>
+<hr/>
+<h3 id="7-statefulset-和-headless-service-在你的项目中是怎么配置的">7. StatefulSet 和 Headless Service 在你的项目中是怎么配置的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#7-statefulset-和-headless-service-在你的项目中是怎么配置的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-6">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-6" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>在 yaml 中静态写了副本数和服务，具体配置靠一个静态表。</p>
+<h4 id="标准答案-6">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-6" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>StatefulSet 指定 <code>replicas</code>，并挂载持久卷，确保数据不丢。Headless Service 配置中 <code>clusterIP: None</code>，返回所有 Pod IP。新节点上线通过解析 StatefulSet 命名规则自动识别。</p>
+<hr/>
+<h3 id="8-如果多个请求同时发起-addnode会出现什么问题">8. 如果多个请求同时发起 AddNode，会出现什么问题？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#8-如果多个请求同时发起-addnode会出现什么问题" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-7">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-7" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>应用层串行控制，ConfChange 是串行的，必须 commit 才能继续。</p>
+<h4 id="标准答案-7">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-7" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 协议原生不支持并发配置变更。ConfChange 必须串行执行，Raft 状态机在未提交前拒绝接收第二个配置请求。应用层需要通过排队/分布式锁控制请求顺序。</p>
+<hr/>
+<h3 id="9-如果两个-confchange-冲突了该怎么办">9. 如果两个 ConfChange 冲突了该怎么办？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#9-如果两个-confchange-冲突了该怎么办" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-8">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-8" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>应用层限制串行，系统里 commit + apply 完成前不会再发请求。</p>
+<h4 id="标准答案-8">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-8" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 协议不允许多个配置请求并发执行。如果出现冲突说明逻辑有问题，建议用 ConfChangeV2 或 Joint Consensus 实现原子变更多个节点配置。</p>
+<hr/>
+<h3 id="10-如果极端网络环境下发生脑裂系统怎么处理">10. 如果极端网络环境下发生脑裂，系统怎么处理？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#10-如果极端网络环境下发生脑裂系统怎么处理" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-9">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-9" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>少于半数的 Leader 会自动降级，停止写入，避免不一致。</p>
+<h4 id="标准答案-9">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-9" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 要求超过半数节点才能 commit。出现脑裂时，孤立节点无法获得多数，只能保持只读状态或降级为 Follower。这样即使发生脑裂，也不会写入冲突数据。</p>
+<hr/>
+<h3 id="11-如果日志同步时发生丢包系统怎么保证恢复">11. 如果日志同步时发生丢包，系统怎么保证恢复？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#11-如果日志同步时发生丢包系统怎么保证恢复" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-10">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-10" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>可以通过快照断点续传，Follower 接收失败后重新请求 Leader 日志。</p>
+<h4 id="标准答案-10">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-10" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Raft 会记录每个 Follower 的日志索引，发生丢包或断连时，从上次日志索引恢复；如果日志太旧会发送 snapshot，snapshot 支持分段发送，支持断点续传。</p>
+<hr/>
+<h3 id="12-raft-中会不会出现多个节点都超过半数的情况">12. Raft 中会不会出现多个节点都超过半数的情况？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#12-raft-中会不会出现多个节点都超过半数的情况" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-11">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-11" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>不可能，因为一个节点只能投一次票，两个多数集不可能同时存在。</p>
+<h4 id="标准答案-11">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-11" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>不会，数学上“多数派”集合不可能交叉，Raft 投票机制也保证一轮任期内每个节点只投一次票，不可能出现多个节点都获得多数。</p>
+<hr/>
+<h3 id="13-在-kubernetes-中如果多个-pod-同时启动你是如何发现并连接这些新-pod-的">13. 在 Kubernetes 中，如果多个 Pod 同时启动，你是如何发现并连接这些新 Pod 的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#13-在-kubernetes-中如果多个-pod-同时启动你是如何发现并连接这些新-pod-的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-12">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-12" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>使用 Headless Service 和 StatefulSet，DNS 查询返回所有 Pod 的 IP 地址，Leader 解析并执行 AddNode 加入集群。</p>
+<h4 id="标准答案-12">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-12" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Headless Service 配置 <code>clusterIP: None</code>，DNS 查询返回所有 Pod IP。StatefulSet 保证 Pod 命名稳定，例如 <code>kv-0</code>, <code>kv-1</code>。业务层 Leader 节点通过 DNS 解析所有节点地址，依次执行 Raft 的 <code>ProposeConfChange</code> 操作添加新节点。</p>
+<hr/>
+<h3 id="14-请介绍一下你们的秒杀系统设计">14. 请介绍一下你们的秒杀系统设计<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#14-请介绍一下你们的秒杀系统设计" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-13">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-13" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Kafka 缓冲请求，Redis 做库存判断和排行榜，库存异步落库，etcd 做锁。</p>
+<h4 id="标准答案-13">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-13" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>前端限流，预热缓存</li>
+<li>消息入 Kafka 实现削峰填谷</li>
+<li>Redis 扣库存 + Lua 脚本保证原子</li>
+<li>Etcd 实现分布式锁防止超卖</li>
+<li>异步落库防止阻塞</li>
+<li>排行榜用 Redis ZSet 结构实现，按 score 排名</li>
+</ul>
+<hr/>
+<h3 id="15-为什么你们使用-etcd-而不是-redis-的-redlock">15. 为什么你们使用 etcd 而不是 Redis 的 redlock？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#15-为什么你们使用-etcd-而不是-redis-的-redlock" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-14">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-14" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>因为 etcd 是 CP 系统，保证一致性，而 redlock 是基于 setnx 的分布式锁，可能在网络分区下出现问题。</p>
+<h4 id="标准答案-14">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-14" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>etcd 基于 Raft 实现强一致性，即使在分区条件下仍然保证锁的正确性；而 redlock 属于最终一致性方案，网络延迟或 Redis 实例不同步可能导致多主。</p>
+<hr/>
+<h3 id="16-redis-的-redlock-有什么问题">16. Redis 的 redlock 有什么问题？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#16-redis-的-redlock-有什么问题" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-15">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-15" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>网络延迟会导致锁漂移或惊群，多个客户端可能都认为自己获得了锁。</p>
+<h4 id="标准答案-15">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-15" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>多实例的时间不同步可能导致误判锁过期</li>
+<li>客户端网络延迟会导致锁释放延迟或抢锁失败</li>
+<li>Redis 故障重启导致锁状态丢失</li>
+<li>实际部署中不能严格保证分布式场景下的一致性</li>
+</ul>
+<hr/>
+<h3 id="17-etcd-是如何保证强一致性的">17. etcd 是如何保证强一致性的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#17-etcd-是如何保证强一致性的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-16">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-16" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>使用租约机制（lease）保证锁的持有者是唯一的，事务（txn）机制保证操作原子性。</p>
+<h4 id="标准答案-16">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-16" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>etcd 基于 Raft 协议，每次写入都要过半节点确认。支持租约机制（lease）对 key 设置 TTL，结合事务（txn）机制可以实现 check-and-set 操作，防止竞争条件。</p>
+<hr/>
+<h3 id="18-如果多个进程同时尝试获取同一个分布式锁这种场景下会发生什么">18. 如果多个进程同时尝试获取同一个分布式锁，这种场景下会发生什么？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#18-如果多个进程同时尝试获取同一个分布式锁这种场景下会发生什么" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-17">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-17" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>只有一个进程会抢到锁，其他会失败或等待重试。</p>
+<h4 id="标准答案-17">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-17" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>如果用 etcd：只有第一个成功执行 txn 的客户端拿到锁，其它返回失败；支持监听事件实现 watch 重试。</li>
+<li>如果用 Redis：setnx 保证原子性，后续客户端只能等待锁释放或失败。</li>
+</ul>
+<hr/>
+<h3 id="19-锁漂移lock-drift是如何发生的">19. 锁漂移（Lock Drift）是如何发生的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#19-锁漂移lock-drift是如何发生的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-18">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-18" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>客户端阻塞或系统时钟不同步，导致租约过期被他人抢占，但旧客户端还认为自己拥有锁。</p>
+<h4 id="标准答案-18">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-18" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>锁漂移常由以下情况导致：</p>
+<ul>
+<li>TTL 过期后还未释放</li>
+<li>网络分区时锁状态不一致</li>
+<li>客户端执行任务卡住未续租</li>
+<li>时钟漂移或不同步，导致判断误差</li>
+</ul>
+<hr/>
+<h3 id="20-假设某个进程拿到了锁但执行任务时间太长超过-ttl锁被别人拿走这时原进程仍尝试释放锁会发生什么">20. 假设某个进程拿到了锁，但执行任务时间太长超过 TTL，锁被别人拿走，这时原进程仍尝试释放锁，会发生什么？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#20-假设某个进程拿到了锁但执行任务时间太长超过-ttl锁被别人拿走这时原进程仍尝试释放锁会发生什么" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-19">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-19" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>会误删别人的锁，导致数据不一致。</p>
+<h4 id="标准答案-19">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-19" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>必须为锁记录唯一 ID，例如客户端 UUID，在释放时通过 compare-and-delete 或 Lua 脚本确保只有锁 owner 才能释放锁，否则可能误删有效锁。</p>
+<hr/>
+<h3 id="21-使用时间戳来判断锁是否有效是否安全还有没有其他方法">21. 使用时间戳来判断锁是否有效是否安全？还有没有其他方法？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#21-使用时间戳来判断锁是否有效是否安全还有没有其他方法" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-20">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-20" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>时间戳不安全，推荐使用唯一 ID（如 pid、UUID）结合 CAS 比较释放。</p>
+<h4 id="标准答案-20">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-20" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>时间戳方案易受网络抖动/时钟不同步影响。更稳妥方式是将锁的 value 设置为唯一进程标识，释放时必须进行 ID 对比，或使用原子脚本控制。</p>
+<hr/>
+<h3 id="22-redis-实现-compare-and-delete-方案能保证原子性吗">22. Redis 实现 compare-and-delete 方案能保证原子性吗？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#22-redis-实现-compare-and-delete-方案能保证原子性吗" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-21">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-21" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>可以，用 Lua 脚本执行 get + check + del 保证原子。</p>
+<h4 id="标准答案-21">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-21" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>是的。Redis 的 <code>EVAL</code> 执行 Lua 脚本是单线程的，天然原子。可写脚本判断 key 的值是否匹配当前客户端 ID，然后删除，实现 compare-and-delete。</p>
+<hr/>
+<h3 id="23-有没有更简单的方法保证-compare-and-delete-的原子性">23. 有没有更简单的方法保证 compare-and-delete 的原子性？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#23-有没有更简单的方法保证-compare-and-delete-的原子性" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-22">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-22" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>可以用 Redis 的 Lua 脚本或特殊命令，但不太清楚具体怎么做。</p>
+<h4 id="标准答案-22">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-22" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>使用 Lua 脚本如：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="lua" data-theme="github-light github-dark"><code data-language="lua" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> redis.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">call</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;get&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, KEYS[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">]) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">==</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> ARGV[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">] </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">then</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> redis.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">call</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;del&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, KEYS[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">])</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">else</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> 0</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">end</span></span></code></pre></figure>
+<p>即可保证 get 与 del 的原子性。</p>
+<hr/>
+<h3 id="24-c-中了解内存分区结构吗">24. C++ 中了解内存分区结构吗？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#24-c-中了解内存分区结构吗" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-23">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-23" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>分为代码段、数据段、堆、栈等区域。</p>
+<h4 id="标准答案-23">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-23" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>C++ 程序运行时内存分为：</p>
+<ul>
+<li><strong>代码段</strong>：存放程序指令（只读）</li>
+<li><strong>数据段</strong>：全局变量和静态变量</li>
+<li><strong>堆</strong>：动态分配内存（new/malloc）</li>
+<li><strong>栈</strong>：函数局部变量、参数</li>
+</ul>
+<hr/>
+<h3 id="25-什么时候变量是放在栈上什么时候放在堆上">25. 什么时候变量是放在栈上？什么时候放在堆上？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#25-什么时候变量是放在栈上什么时候放在堆上" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-24">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-24" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>局部变量默认在栈上，new 或 malloc 分配的是堆。</p>
+<h4 id="标准答案-24">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-24" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>栈：函数内声明变量、参数默认在栈上</li>
+<li>堆：new/malloc 动态分配内存，需要手动释放（delete/free）</li>
+</ul>
+<hr/>
+<h3 id="26-malloc-和-new-有什么区别">26. malloc 和 new 有什么区别？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#26-malloc-和-new-有什么区别" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-25">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-25" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>malloc 返回 void*，要强转，new 返回对应类型指针。</p>
+<h4 id="标准答案-25">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-25" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li><code>malloc</code> 是 C 风格，返回 void*，不调用构造函数</li>
+<li><code>new</code> 是 C++，返回具体类型指针，并调用构造函数</li>
+<li>对象释放时，<code>free</code> 不调用析构函数，而 <code>delete</code> 会调用析构函数</li>
+</ul>
+<hr/>
+<h3 id="27-除了类型转换new-和-malloc-还有什么不同">27. 除了类型转换，new 和 malloc 还有什么不同？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#27-除了类型转换new-和-malloc-还有什么不同" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-26">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-26" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>new 会调用构造函数，malloc 不会。</p>
+<h4 id="标准答案-26">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-26" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>new 是 C++ 的操作符，构造对象，自动类型安全；malloc 仅分配内存。new 和 delete 是成对使用，支持重载和异常处理。</p>
+<hr/>
+<h3 id="28-什么是虚函数">28. 什么是虚函数？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#28-什么是虚函数" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-27">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-27" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>类似接口，子类 override 虚函数，运行时多态。</p>
+<h4 id="标准答案-27">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-27" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>虚函数是用 <code>virtual</code> 修饰的成员函数，支持运行时多态，基类指针调用子类方法依赖 vtable（虚函数表）实现动态绑定。</p>
+<hr/>
+<h3 id="29-构造函数能是虚函数吗">29. 构造函数能是虚函数吗？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#29-构造函数能是虚函数吗" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-28">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-28" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>不能，构造过程中还没有虚函数表。</p>
+<h4 id="标准答案-28">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-28" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>不能。构造函数在对象创建时调用，而虚函数表尚未初始化，逻辑上无法使用虚函数。</p>
+<hr/>
+<h3 id="30-虚函数表vtable存在哪里">30. 虚函数表（vtable）存在哪里？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#30-虚函数表vtable存在哪里" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-29">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-29" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>每个对象有一个隐藏的 vptr 指针，指向类的 vtable。</p>
+<h4 id="标准答案-29">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-29" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>vtable 是类级别的静态表，包含函数指针。每个含虚函数的对象会有一个隐藏指针（vptr）指向该类的 vtable。</p>
+<hr/>
+<h3 id="31-c-的运行时多态是如何实现的">31. C++ 的运行时多态是如何实现的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#31-c-的运行时多态是如何实现的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-30">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-30" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>通过 vtable 和 vptr。</p>
+<h4 id="标准答案-30">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-30" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>当类含虚函数时，编译器为其生成 vtable 表，对象中包含 vptr 指针指向 vtable。调用虚函数时通过 vptr 查表，实现动态绑定。</p>
+<hr/>
+<h3 id="32-c-中-map-和-unordered_map-的底层实现分别是什么">32. C++ 中 map 和 unordered_map 的底层实现分别是什么？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#32-c-中-map-和-unordered_map-的底层实现分别是什么" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-31">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-31" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>map 是红黑树，有序；unordered_map 是哈希表，无序。</p>
+<h4 id="标准答案-31">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-31" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li><code>map</code>：基于红黑树（平衡二叉搜索树），插入/查找/删除复杂度 O(logN)。</li>
+<li><code>unordered_map</code>：基于哈希表，使用链地址法解决冲突，平均复杂度 O(1)。</li>
+</ul>
+<hr/>
+<h3 id="33-c-中-vector-的底层实现原理是什么">33. C++ 中 vector 的底层实现原理是什么？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#33-c-中-vector-的底层实现原理是什么" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-32">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-32" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>是一个动态数组，支持自动扩容。</p>
+<h4 id="标准答案-32">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-32" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p><code>vector</code> 使用连续内存存储元素，自动扩容时按 1.5~2 倍扩容，旧数据搬迁到新地址。支持随机访问但插入删除中间元素代价较高。</p>
+<hr/>
+<h3 id="34-golang-的-map-是怎么实现的">34. Golang 的 map 是怎么实现的？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#34-golang-的-map-是怎么实现的" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-33">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-33" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>基于哈希表实现。</p>
+<h4 id="标准答案-33">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-33" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>Go map 使用开放寻址 + 桶（bucket）+ 哈希冲突解决机制，每个桶包含多个 key-value，冲突时通过扩容或链式 bucket 链接。</p>
+<hr/>
+<h3 id="35-链地址法和开放地址法分别是什么">35. 链地址法和开放地址法分别是什么？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#35-链地址法和开放地址法分别是什么" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-34">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-34" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>链地址法使用链表处理哈希冲突，开放地址法则查找下一个空位。</p>
+<h4 id="标准答案-34">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-34" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li><strong>链地址法</strong>：每个桶是一个链表，冲突元素挂在链上（如 C++ unordered_map）</li>
+<li><strong>开放地址法</strong>：发生冲突时继续探测下一个可用位置（如 Go 的 map）</li>
+</ul>
+<p>继续整理第 <strong>36 至 43 题</strong>，保持题干完整，不合并问题：</p>
+<hr/>
+<h3 id="36-有一张表记录了玩家的所属省份和-playerid请写一条-sql-查询语句统计每个省份的玩家数量">36. 有一张表记录了玩家的所属省份和 PlayerID，请写一条 SQL 查询语句，统计每个省份的玩家数量<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#36-有一张表记录了玩家的所属省份和-playerid请写一条-sql-查询语句统计每个省份的玩家数量" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-35">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-35" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<pre><code>SELECT Province, COUNT(PlayerID) FROM table GROUP BY Province;
+</code></pre>
+<h4 id="标准答案-35">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-35" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="sql" data-theme="github-light github-dark"><code data-language="sql" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">SELECT</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Province, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">COUNT</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">DISTINCT</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> PlayerID) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">AS</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> PlayerCount</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">FROM</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> PlayerTable</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">GROUP BY</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> Province;</span></span></code></pre></figure>
+<p>说明：使用 <code>DISTINCT</code> 防止重复计数，<code>GROUP BY</code> 进行分组聚合。</p>
+<hr/>
+<h3 id="37-linux-中常用的命令有哪些">37. Linux 中常用的命令有哪些？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#37-linux-中常用的命令有哪些" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-36">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-36" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>太多了，比如 <code>ls</code>, <code>cd</code>, <code>grep</code>, <code>ps</code>, <code>top</code>, <code>htop</code>, <code>df</code>, <code>du</code>, <code>chmod</code>, <code>chown</code>, <code>kill</code> 等。</p>
+<h4 id="标准答案-36">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-36" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>常见 Linux 命令分类举例：</p>
+<ul>
+<li><strong>文件操作</strong>：<code>ls</code>, <code>cd</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>touch</code>, <code>mkdir</code></li>
+<li><strong>系统信息</strong>：<code>top</code>, <code>htop</code>, <code>uptime</code>, <code>free</code>, <code>vmstat</code></li>
+<li><strong>进程管理</strong>：<code>ps</code>, <code>kill</code>, <code>killall</code>, <code>nice</code>, <code>renice</code></li>
+<li><strong>网络</strong>：<code>ping</code>, <code>netstat</code>, <code>ss</code>, <code>curl</code>, <code>wget</code>, <code>scp</code>, <code>ssh</code></li>
+<li><strong>磁盘与权限</strong>：<code>df</code>, <code>du</code>, <code>chmod</code>, <code>chown</code>, <code>mount</code></li>
+</ul>
+<hr/>
+<h3 id="38-如何查看一个进程占用的内存情况">38. 如何查看一个进程占用的内存情况？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#38-如何查看一个进程占用的内存情况" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-37">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-37" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>可以用 <code>ps aux</code> 查看 RSS/VSZ，或者使用 <code>htop</code> 查看实时内存占用。</p>
+<h4 id="标准答案-37">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-37" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li><code>ps -eo pid,comm,%mem,rss,vsz</code> 查看各进程内存</li>
+<li><code>top</code> 或 <code>htop</code> 动态查看内存占用</li>
+<li><code>/proc/&lt;pid>/status</code> 查看 <code>VmRSS</code>、<code>VmSize</code></li>
+<li><code>smem -r -k</code> 更详细的工具（需安装）</li>
+</ul>
+<hr/>
+<h3 id="39-ps--ef-输出中包含哪些信息">39. <code>ps -ef</code> 输出中包含哪些信息？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#39-ps--ef-输出中包含哪些信息" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-38">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-38" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>PID，父进程 PID（PPID），虚拟内存占用（VSZ），启动命令（CMD）等。</p>
+<h4 id="标准答案-38">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-38" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p><code>ps -ef</code> 显示如下字段：</p>
+<ul>
+<li><code>UID</code>：用户 ID</li>
+<li><code>PID</code>：进程 ID</li>
+<li><code>PPID</code>：父进程 ID</li>
+<li><code>C</code>：CPU 占用率</li>
+<li><code>STIME</code>：启动时间</li>
+<li><code>TTY</code>：终端</li>
+<li><code>TIME</code>：累计 CPU 时间</li>
+<li><code>CMD</code>：启动命令行</li>
+</ul>
+<hr/>
+<h3 id="40-请你实现一个算法合并-k-个升序链表">40. 请你实现一个算法，合并 K 个升序链表<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#40-请你实现一个算法合并-k-个升序链表" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-39">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-39" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>可以使用分治或者最小堆，先两两合并或者用优先队列维护每个链表头节点。</p>
+<h4 id="标准答案-39">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-39" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>两种方式：</p>
+<ol>
+<li><strong>分治</strong>：递归两两合并，时间复杂度 O(NlogK)</li>
+<li><strong>最小堆（优先队列）</strong>：每次从堆中取最小节点并推入其 next 节点，时间复杂度 O(NlogK)</li>
+</ol>
+<hr/>
+<h3 id="41-合并-k-个升序链表的时间复杂度是多少有没有更快的方式">41. 合并 K 个升序链表的时间复杂度是多少？有没有更快的方式？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#41-合并-k-个升序链表的时间复杂度是多少有没有更快的方式" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-40">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-40" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>堆方式是 O(N log K)，比直接遍历所有元素合并 O(KN) 要快。</p>
+<h4 id="标准答案-40">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-40" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ul>
+<li>分治合并：O(N log K)，N 为总节点数，K 为链表数</li>
+<li>优先队列（堆）：O(N log K)
+无法比 O(N log K) 更快，因为每个元素都必须访问一次，logK 是堆的插入/删除复杂度下界。</li>
+</ul>
+<hr/>
+<h3 id="42-使用堆实现合并-k-个升序链表具体步骤是什么">42. 使用堆实现合并 K 个升序链表，具体步骤是什么？<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#42-使用堆实现合并-k-个升序链表具体步骤是什么" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-41">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-41" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<ol>
+<li>把每个链表头结点放入堆；</li>
+<li>每次取堆顶最小节点加入结果链表；</li>
+<li>如果该节点有 next，推入堆中；</li>
+<li>重复直到堆为空。</li>
+</ol>
+<h4 id="标准答案-41">标准答案<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案-41" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>堆中保存所有链表头节点，流程如下：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="cpp" data-theme="github-light github-dark"><code data-language="cpp" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">auto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> cmp </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> [](</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"> a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"> b</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">) { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> a->val </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> b->val; };</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">priority_queue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">vector</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">>, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">decltype</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(cmp)> </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">pq</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">cmp</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">);</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">auto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> node : lists) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (node) pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(node);</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">!</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">empty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">()) {</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    auto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> minNode </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">top</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(); pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">pop</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">();</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    tail->next </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> minNode;</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (minNode->next) pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(minNode->next);</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></figure>
+<hr/>
+<h3 id="43-请你实现合并-k-个升序链表的完整代码5-分钟内">43. 请你实现合并 K 个升序链表的完整代码（5 分钟内）<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#43-请你实现合并-k-个升序链表的完整代码5-分钟内" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="回答-42">回答<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#回答-42" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>代码部分写完了合并逻辑，但 main 函数没有来得及写。</p>
+<h4 id="标准答案c-示例">标准答案（C++ 示例）<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#标准答案c-示例" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="cpp" data-theme="github-light github-dark"><code data-language="cpp" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">struct</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> ListNode</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> {</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> val;</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> next;</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">    ListNode</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"> x</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">) : </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">val</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(x), </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">nullptr</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">) {}</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">};</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> mergeKLists</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">vector</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">&amp;</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"> lists</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">) {</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    auto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> cmp </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> [](</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"> a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70;"> b</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">) { </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> a->val </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> b->val; };</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    priority_queue</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, vector</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">&lt;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*></span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">decltype</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(cmp)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">></span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> pq</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(cmp);</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">auto</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> node : lists) {</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">        if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (node) pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(node);</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    }</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    ListNode </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">dummy</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">), </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">tail </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> &amp;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">dummy;</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">!</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">empty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">()) {</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        ListNode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> node </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">top</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(); pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">pop</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">();</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        tail->next </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> node;</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">        tail </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> tail->next;</span></span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">        if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> (node->next) pq.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">push</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(node->next);</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    }</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> dummy.next;</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></figure></article><hr/><div class="page-footer"></div></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:2,&quot;scale&quot;:1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div><button class="global-graph-icon" aria-label="Global Graph"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+                s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+                c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+                C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+                c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+                v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+                s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+                C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+                S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+                s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+                s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></button></div><div class="global-graph-outer"><div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div></div></div><div class="toc desktop-only"><button type="button" class="toc-header" aria-controls="toc-40" aria-expanded="true"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><ul id="list-1" class="toc-content overflow"><li class="depth-0"><a href="#问题和回答记录" data-for="问题和回答记录">问题和回答记录</a></li><li class="depth-0"><a href="#面试问题和标准答案" data-for="面试问题和标准答案">面试问题和标准答案</a></li><li class="depth-1"><a href="#1-介绍一下你的分布式-kv-存储项目" data-for="1-介绍一下你的分布式-kv-存储项目">1. 介绍一下你的分布式 KV 存储项目</a></li><li class="depth-1"><a href="#2-请详细讲一下-raft-协议的流程" data-for="2-请详细讲一下-raft-协议的流程">2. 请详细讲一下 Raft 协议的流程</a></li><li class="depth-1"><a href="#3-raft-协议中的故障恢复是如何做的" data-for="3-raft-协议中的故障恢复是如何做的">3. Raft 协议中的故障恢复是如何做的？</a></li><li class="depth-1"><a href="#4-raft-是否可能出现多个-leader" data-for="4-raft-是否可能出现多个-leader">4. Raft 是否可能出现多个 Leader？</a></li><li class="depth-1"><a href="#5-请解释一下-lsm-tree-的写放大问题" data-for="5-请解释一下-lsm-tree-的写放大问题">5. 请解释一下 LSM Tree 的写放大问题</a></li><li class="depth-1"><a href="#6-在你们系统中服务发现是怎么做的" data-for="6-在你们系统中服务发现是怎么做的">6. 在你们系统中，服务发现是怎么做的？</a></li><li class="depth-1"><a href="#7-statefulset-和-headless-service-在你的项目中是怎么配置的" data-for="7-statefulset-和-headless-service-在你的项目中是怎么配置的">7. StatefulSet 和 Headless Service 在你的项目中是怎么配置的？</a></li><li class="depth-1"><a href="#8-如果多个请求同时发起-addnode会出现什么问题" data-for="8-如果多个请求同时发起-addnode会出现什么问题">8. 如果多个请求同时发起 AddNode，会出现什么问题？</a></li><li class="depth-1"><a href="#9-如果两个-confchange-冲突了该怎么办" data-for="9-如果两个-confchange-冲突了该怎么办">9. 如果两个 ConfChange 冲突了该怎么办？</a></li><li class="depth-1"><a href="#10-如果极端网络环境下发生脑裂系统怎么处理" data-for="10-如果极端网络环境下发生脑裂系统怎么处理">10. 如果极端网络环境下发生脑裂，系统怎么处理？</a></li><li class="depth-1"><a href="#11-如果日志同步时发生丢包系统怎么保证恢复" data-for="11-如果日志同步时发生丢包系统怎么保证恢复">11. 如果日志同步时发生丢包，系统怎么保证恢复？</a></li><li class="depth-1"><a href="#12-raft-中会不会出现多个节点都超过半数的情况" data-for="12-raft-中会不会出现多个节点都超过半数的情况">12. Raft 中会不会出现多个节点都超过半数的情况？</a></li><li class="depth-1"><a href="#13-在-kubernetes-中如果多个-pod-同时启动你是如何发现并连接这些新-pod-的" data-for="13-在-kubernetes-中如果多个-pod-同时启动你是如何发现并连接这些新-pod-的">13. 在 Kubernetes 中，如果多个 Pod 同时启动，你是如何发现并连接这些新 Pod 的？</a></li><li class="depth-1"><a href="#14-请介绍一下你们的秒杀系统设计" data-for="14-请介绍一下你们的秒杀系统设计">14. 请介绍一下你们的秒杀系统设计</a></li><li class="depth-1"><a href="#15-为什么你们使用-etcd-而不是-redis-的-redlock" data-for="15-为什么你们使用-etcd-而不是-redis-的-redlock">15. 为什么你们使用 etcd 而不是 Redis 的 redlock？</a></li><li class="depth-1"><a href="#16-redis-的-redlock-有什么问题" data-for="16-redis-的-redlock-有什么问题">16. Redis 的 redlock 有什么问题？</a></li><li class="depth-1"><a href="#17-etcd-是如何保证强一致性的" data-for="17-etcd-是如何保证强一致性的">17. etcd 是如何保证强一致性的？</a></li><li class="depth-1"><a href="#18-如果多个进程同时尝试获取同一个分布式锁这种场景下会发生什么" data-for="18-如果多个进程同时尝试获取同一个分布式锁这种场景下会发生什么">18. 如果多个进程同时尝试获取同一个分布式锁，这种场景下会发生什么？</a></li><li class="depth-1"><a href="#19-锁漂移lock-drift是如何发生的" data-for="19-锁漂移lock-drift是如何发生的">19. 锁漂移（Lock Drift）是如何发生的？</a></li><li class="depth-1"><a href="#20-假设某个进程拿到了锁但执行任务时间太长超过-ttl锁被别人拿走这时原进程仍尝试释放锁会发生什么" data-for="20-假设某个进程拿到了锁但执行任务时间太长超过-ttl锁被别人拿走这时原进程仍尝试释放锁会发生什么">20. 假设某个进程拿到了锁，但执行任务时间太长超过 TTL，锁被别人拿走，这时原进程仍尝试释放锁，会发生什么？</a></li><li class="depth-1"><a href="#21-使用时间戳来判断锁是否有效是否安全还有没有其他方法" data-for="21-使用时间戳来判断锁是否有效是否安全还有没有其他方法">21. 使用时间戳来判断锁是否有效是否安全？还有没有其他方法？</a></li><li class="depth-1"><a href="#22-redis-实现-compare-and-delete-方案能保证原子性吗" data-for="22-redis-实现-compare-and-delete-方案能保证原子性吗">22. Redis 实现 compare-and-delete 方案能保证原子性吗？</a></li><li class="depth-1"><a href="#23-有没有更简单的方法保证-compare-and-delete-的原子性" data-for="23-有没有更简单的方法保证-compare-and-delete-的原子性">23. 有没有更简单的方法保证 compare-and-delete 的原子性？</a></li><li class="depth-1"><a href="#24-c-中了解内存分区结构吗" data-for="24-c-中了解内存分区结构吗">24. C++ 中了解内存分区结构吗？</a></li><li class="depth-1"><a href="#25-什么时候变量是放在栈上什么时候放在堆上" data-for="25-什么时候变量是放在栈上什么时候放在堆上">25. 什么时候变量是放在栈上？什么时候放在堆上？</a></li><li class="depth-1"><a href="#26-malloc-和-new-有什么区别" data-for="26-malloc-和-new-有什么区别">26. malloc 和 new 有什么区别？</a></li><li class="depth-1"><a href="#27-除了类型转换new-和-malloc-还有什么不同" data-for="27-除了类型转换new-和-malloc-还有什么不同">27. 除了类型转换，new 和 malloc 还有什么不同？</a></li><li class="depth-1"><a href="#28-什么是虚函数" data-for="28-什么是虚函数">28. 什么是虚函数？</a></li><li class="depth-1"><a href="#29-构造函数能是虚函数吗" data-for="29-构造函数能是虚函数吗">29. 构造函数能是虚函数吗？</a></li><li class="depth-1"><a href="#30-虚函数表vtable存在哪里" data-for="30-虚函数表vtable存在哪里">30. 虚函数表（vtable）存在哪里？</a></li><li class="depth-1"><a href="#31-c-的运行时多态是如何实现的" data-for="31-c-的运行时多态是如何实现的">31. C++ 的运行时多态是如何实现的？</a></li><li class="depth-1"><a href="#32-c-中-map-和-unordered_map-的底层实现分别是什么" data-for="32-c-中-map-和-unordered_map-的底层实现分别是什么">32. C++ 中 map 和 unordered_map 的底层实现分别是什么？</a></li><li class="depth-1"><a href="#33-c-中-vector-的底层实现原理是什么" data-for="33-c-中-vector-的底层实现原理是什么">33. C++ 中 vector 的底层实现原理是什么？</a></li><li class="depth-1"><a href="#34-golang-的-map-是怎么实现的" data-for="34-golang-的-map-是怎么实现的">34. Golang 的 map 是怎么实现的？</a></li><li class="depth-1"><a href="#35-链地址法和开放地址法分别是什么" data-for="35-链地址法和开放地址法分别是什么">35. 链地址法和开放地址法分别是什么？</a></li><li class="depth-1"><a href="#36-有一张表记录了玩家的所属省份和-playerid请写一条-sql-查询语句统计每个省份的玩家数量" data-for="36-有一张表记录了玩家的所属省份和-playerid请写一条-sql-查询语句统计每个省份的玩家数量">36. 有一张表记录了玩家的所属省份和 PlayerID，请写一条 SQL 查询语句，统计每个省份的玩家数量</a></li><li class="depth-1"><a href="#37-linux-中常用的命令有哪些" data-for="37-linux-中常用的命令有哪些">37. Linux 中常用的命令有哪些？</a></li><li class="depth-1"><a href="#38-如何查看一个进程占用的内存情况" data-for="38-如何查看一个进程占用的内存情况">38. 如何查看一个进程占用的内存情况？</a></li><li class="depth-1"><a href="#39-ps--ef-输出中包含哪些信息" data-for="39-ps--ef-输出中包含哪些信息">39. ps -ef 输出中包含哪些信息？</a></li><li class="depth-1"><a href="#40-请你实现一个算法合并-k-个升序链表" data-for="40-请你实现一个算法合并-k-个升序链表">40. 请你实现一个算法，合并 K 个升序链表</a></li><li class="depth-1"><a href="#41-合并-k-个升序链表的时间复杂度是多少有没有更快的方式" data-for="41-合并-k-个升序链表的时间复杂度是多少有没有更快的方式">41. 合并 K 个升序链表的时间复杂度是多少？有没有更快的方式？</a></li><li class="depth-1"><a href="#42-使用堆实现合并-k-个升序链表具体步骤是什么" data-for="42-使用堆实现合并-k-个升序链表具体步骤是什么">42. 使用堆实现合并 K 个升序链表，具体步骤是什么？</a></li><li class="depth-1"><a href="#43-请你实现合并-k-个升序链表的完整代码5-分钟内" data-for="43-请你实现合并-k-个升序链表的完整代码5-分钟内">43. 请你实现合并 K 个升序链表的完整代码（5 分钟内）</a></li><li class="overflow-end"></li></ul></div><div class="backlinks"><h3>Backlinks</h3><ul id="list-2" class="overflow"><li><a href="../../posts/Recruitment/2026-秋招合集" class="internal">2026 秋招合集</a></li><li class="overflow-end"></li></ul></div></div><footer class><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.5.2</a> © 2026</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></div></body><script type="application/javascript" data-persist="true">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script><script type="module" data-persist="true">function E(a,e){if(!a)return;function t(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function n(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}a?.addEventListener("click",t),window.addCleanup(()=>a?.removeEventListener("click",t)),document.addEventListener("keydown",n),window.addCleanup(()=>document.removeEventListener("keydown",n))}function f(a){for(;a.firstChild;)a.removeChild(a.firstChild)}var m=class{constructor(e,t){this.container=e;this.content=t;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),t=this.onMouseMove.bind(this),n=this.onMouseUp.bind(this),o=this.onTouchStart.bind(this),r=this.onTouchMove.bind(this),i=this.onTouchEnd.bind(this),s=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",t),document.addEventListener("mouseup",n),this.container.addEventListener("touchstart",o,{passive:!1}),document.addEventListener("touchmove",r,{passive:!1}),document.addEventListener("touchend",i),window.addEventListener("resize",s),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",t),()=>document.removeEventListener("mouseup",n),()=>this.container.removeEventListener("touchstart",o),()=>document.removeEventListener("touchmove",r),()=>document.removeEventListener("touchend",i),()=>window.removeEventListener("resize",s))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let t=this.createButton("+",()=>this.zoom(.1)),n=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(n),e.appendChild(o),e.appendChild(t),this.container.appendChild(e)}createButton(e,t){let n=document.createElement("button");return n.textContent=e,n.className="mermaid-control-button",n.addEventListener("click",t),window.addCleanup(()=>n.removeEventListener("click",t)),n}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}onTouchStart(e){if(e.touches.length!==1)return;this.isDragging=!0;let t=e.touches[0];this.startPan={x:t.clientX-this.currentPan.x,y:t.clientY-this.currentPan.y}}onTouchMove(e){if(!this.isDragging||e.touches.length!==1)return;e.preventDefault();let t=e.touches[0];this.currentPan={x:t.clientX-this.startPan.x,y:t.clientY-this.startPan.y},this.updateTransform()}onTouchEnd(){this.isDragging=!1}zoom(e){let t=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),n=this.content.getBoundingClientRect(),o=n.width/2,r=n.height/2,i=t-this.scale;this.currentPan.x-=o*i,this.currentPan.y-=r*i,this.scale=t,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){let t=this.content.querySelector("svg").getBoundingClientRect(),n=t.width/this.scale,o=t.height/this.scale;this.scale=1,this.currentPan={x:(this.container.clientWidth-n)/2,y:(this.container.clientHeight-o)/2},this.updateTransform()}},T=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],y;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;y||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let t=y.default,n=new WeakMap;for(let r of e)n.set(r,r.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let c=n.get(s);c&&(s.innerHTML=c)}let r=T.reduce((s,c)=>(s[c]=window.getComputedStyle(document.documentElement).getPropertyValue(c),s),{}),i=document.documentElement.getAttribute("saved-theme")==="dark";t.initialize({startOnLoad:!1,securityLevel:"loose",theme:i?"dark":"base",themeVariables:{fontFamily:r["--codeFont"],primaryColor:r["--light"],primaryTextColor:r["--darkgray"],primaryBorderColor:r["--tertiary"],lineColor:r["--darkgray"],secondaryColor:r["--secondary"],tertiaryColor:r["--tertiary"],clusterBkg:r["--light"],edgeLabelBackground:r["--highlight"]}}),await t.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let r=0;r<e.length;r++){let v=function(){let g=l.querySelector("#mermaid-space"),h=l.querySelector(".mermaid-content");if(!h)return;f(h);let w=i.querySelector("svg").cloneNode(!0);h.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new m(g,h)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},i=e[r],s=i.parentElement,c=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(c),L=c.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),E(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript" data-persist="true"></script><script src="../../postscript.js" type="module" data-persist="true"></script></html>
